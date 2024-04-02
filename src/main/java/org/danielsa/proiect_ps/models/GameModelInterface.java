@@ -7,7 +7,7 @@ public interface GameModelInterface {
     Move getSystemMove();
     Move undo();
     UserPlayer getUserPlayer();
-    ComputerPlayer getSystemPlayer();
+    ComputerPlayer getComputer();
     boolean isEndgame();
     void clearBoard();
     boolean checksExistingValidMoves();

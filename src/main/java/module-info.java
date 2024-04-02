@@ -11,13 +11,11 @@ module org.danielsa.proiect_ps {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
-    requires com.almasb.fxgl.all;
     requires static lombok;
     requires annotations;
     requires java.sql;
     requires java.persistence;
     requires org.hibernate.orm.core;
-
 
     opens org.danielsa.proiect_ps to javafx.fxml;
     opens org.danielsa.proiect_ps.views to javafx.fxml;

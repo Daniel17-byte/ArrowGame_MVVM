@@ -1,20 +1,20 @@
 package org.danielsa.proiect_ps.presenters;
 
-import org.danielsa.proiect_ps.models.RegisterModel;
-import org.danielsa.proiect_ps.views.RegisterView;
+import org.danielsa.proiect_ps.models.RegisterModelInterface;
+import org.danielsa.proiect_ps.models.RegisterViewInterface;
 
 public class RegisterPresenter {
-    private final RegisterView view;
-    private final RegisterModel model;
+    private final RegisterViewInterface view;
+    private final RegisterModelInterface model;
 
-    public RegisterPresenter(RegisterView view, RegisterModel model) {
+    public RegisterPresenter(RegisterViewInterface view, RegisterModelInterface model) {
         this.view = view;
         this.model = model;
         initView();
     }
 
     private void initView() {
-        view.setOnRegister(this::handleRegisterAttempt);
+        view.setOnRegisterAttempt(this::handleRegisterAttempt);
     }
 
     private void handleRegisterAttempt(String username, String password, String usertype) {

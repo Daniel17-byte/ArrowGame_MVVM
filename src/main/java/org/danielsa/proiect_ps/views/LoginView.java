@@ -9,15 +9,14 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import lombok.Getter;
 import org.danielsa.proiect_ps.Main;
-import org.danielsa.proiect_ps.models.RegisterModel;
-import org.danielsa.proiect_ps.models.UserType;
+import org.danielsa.proiect_ps.models.*;
 import org.danielsa.proiect_ps.presenters.DatabaseService;
 import org.danielsa.proiect_ps.presenters.RegisterPresenter;
 
 import java.io.IOException;
 
 @Getter
-public class LoginView extends Scene {
+public class LoginView extends Scene implements LoginViewInterface {
     private TextField usernameField;
     private PasswordField passwordField;
     private Button loginButton;
@@ -33,7 +32,8 @@ public class LoginView extends Scene {
         initComponents();
     }
 
-    private void initComponents() {
+    @Override
+    public void initComponents() {
         VBox root = (VBox) getRoot();
         root.setSpacing(10);
         root.setPadding(new Insets(10));
@@ -55,6 +55,7 @@ public class LoginView extends Scene {
         root.getChildren().addAll(usernameField, passwordField, loginButton, resultLabel, registerButton);
     }
 
+    @Override
     public void setOnLoginAttempt(LoginAttemptHandler handler) {
         loginButton.setOnAction(event -> {
             String username = usernameField.getText();
@@ -63,6 +64,7 @@ public class LoginView extends Scene {
         });
     }
 
+    @Override
     public void showLoginResult(boolean success) {
         if (success) {
             Stage primaryStage = (Stage) this.getWindow();
@@ -91,20 +93,18 @@ public class LoginView extends Scene {
         }
     }
 
-    public interface LoginAttemptHandler {
-        void onLoginAttempt(String username, String password);
-    }
-
-    private void openRegisterWindow() {
-
-        RegisterView registerView = new RegisterView(databaseService);
-        RegisterModel registerModel = new RegisterModel(databaseService);
-
+    @SuppressWarnings("CastCanBeRemovedNarrowingVariableType")
+    @Override
+    public void openRegisterWindow() {
+        RegisterViewInterface view = new RegisterView(databaseService);
+        RegisterModelInterface model = new RegisterModel(databaseService);
         @SuppressWarnings("unused")
-        RegisterPresenter registerPresenter = new RegisterPresenter(registerView, registerModel);
+        RegisterPresenter presenter = new RegisterPresenter(view, model);
 
         Stage registerStage = new Stage();
-        registerStage.setScene(registerView);
+
+        registerStage.setScene((RegisterView) view);
+
         registerStage.setTitle("Register");
         registerStage.show();
     }

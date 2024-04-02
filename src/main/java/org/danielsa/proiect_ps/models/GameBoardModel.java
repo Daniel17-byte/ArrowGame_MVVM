@@ -4,26 +4,31 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 
-public class GameBoard implements GameBoardInterface {
-    @Getter
+@Getter
+public class GameBoardModel implements GameBoardInterface {
     private final int size;
     private Arrow[][] board;
     private final ArrayList<String> directions;
 
-    public GameBoard(int size) {
+    public GameBoardModel(int size) {
         this.size = size;
         if (size == 4) directions = smallBoardDirections;
         else directions = largeBoardDirections;
         board = new Arrow[size][size];
     }
 
-    public GameBoard(GameBoard gameBoard) {
+    public GameBoardModel(GameBoardModel gameBoard) {
         this.size = gameBoard.getSize();
         this.directions = gameBoard.directions;
         this.board = new Arrow[this.size][this.size];
         for (int i = 0; i < this.size; i++) {
             System.arraycopy(gameBoard.board[i], 0, this.board[i], 0, this.size);
         }
+    }
+
+    @Override
+    public int getSize() {
+        return size;
     }
 
     public boolean makeMove(Move move) {

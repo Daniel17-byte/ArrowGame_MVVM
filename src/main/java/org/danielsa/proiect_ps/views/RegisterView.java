@@ -11,12 +11,14 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.Getter;
 import org.danielsa.proiect_ps.Main;
+import org.danielsa.proiect_ps.models.RegisterAttemptHandler;
+import org.danielsa.proiect_ps.models.RegisterViewInterface;
 import org.danielsa.proiect_ps.presenters.DatabaseService;
 
 import java.io.IOException;
 
 @Getter
-public class RegisterView extends Scene {
+public class RegisterView extends Scene implements RegisterViewInterface {
     private TextField usernameField;
     private PasswordField passwordField;
     private TextField userTypeField;
@@ -32,7 +34,8 @@ public class RegisterView extends Scene {
         initComponents();
     }
 
-    private void initComponents() {
+    @Override
+    public void initComponents() {
         VBox root = (VBox) getRoot();
         root.setSpacing(10);
         usernameField = new TextField();
@@ -51,15 +54,17 @@ public class RegisterView extends Scene {
         root.getChildren().addAll(usernameField, passwordField, userTypeField, registerButton);
     }
 
-    public void setOnRegister(RegisterHandler handler) {
+    @Override
+    public void setOnRegisterAttempt(RegisterAttemptHandler handler) {
         registerButton.setOnAction(event -> {
             String username = usernameField.getText();
             String password = passwordField.getText();
             String userType = userTypeField.getText();
-            handler.onRegister(username, password, userType);
+            handler.onRegisterAttempt(username, password, userType);
         });
     }
 
+    @Override
     public void showRegisterResult(boolean success) {
         if (success) {
             Stage primaryStage = (Stage) this.getWindow();
@@ -83,9 +88,5 @@ public class RegisterView extends Scene {
         } else {
             resultLabel.setText("Register failed. Please try again.");
         }
-    }
-
-    public interface RegisterHandler {
-        void onRegister(String username, String password, String userType);
     }
 }

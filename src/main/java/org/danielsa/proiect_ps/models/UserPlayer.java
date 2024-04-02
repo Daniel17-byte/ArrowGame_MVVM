@@ -11,10 +11,4 @@ public class UserPlayer {
     public UserPlayer(String color) {
         this.color = color;
     }
-
-    @SuppressWarnings("unused")
-    public UserPlayer(String color, User user) {
-        this.color = color;
-        this.user = user;
-    }
 }

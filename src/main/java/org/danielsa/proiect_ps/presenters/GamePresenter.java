@@ -3,13 +3,13 @@ package org.danielsa.proiect_ps.presenters;
 import org.danielsa.proiect_ps.models.*;
 
 public class GamePresenter {
-    private final ViewInterface view;
+    private final GameViewInterface view;
     private final GameModelInterface model;
 
-    public GamePresenter(ViewInterface view) {
+    public GamePresenter(GameViewInterface view) {
         this.view = view;
-        model = new Game(new ComputerPlayer("r"), new UserPlayer("g"), new GameBoard(8));
-        model.getSystemPlayer().setStrategy(new MinMaxStrategy(2, 10));
+        model = new GameModel(new ComputerPlayer("r"), new UserPlayer("g"), new GameBoardModel(8));
+        model.getComputer().setStrategy(new MinMaxStrategy(2, 10));
     }
 
     public void userRegisterMove(String direction, int row, int column) {
@@ -31,7 +31,7 @@ public class GamePresenter {
 
         Move move = model.getSystemMove();
         if (move != null){
-            view.placeArrow(model.getSystemPlayer().getColor(), move.getArrow().getDirection(), move.getX(), move.getY());
+            view.placeArrow(model.getComputer().getColor(), move.getArrow().getDirection(), move.getX(), move.getY());
         }
 
         if(model.isEndgame()){
@@ -41,7 +41,7 @@ public class GamePresenter {
 
     public void setPlayerColor(String color) {
         if(model.getUserPlayer().getColor().equals(color)) return;
-        model.getSystemPlayer().setColor(model.getUserPlayer().getColor());
+        model.getComputer().setColor(model.getUserPlayer().getColor());
         model.getUserPlayer().setColor(color);
         model.changePlayerColor(model.getUserPlayer(), color);
     }

@@ -3,11 +3,7 @@ package org.danielsa.proiect_ps.presenters;
 import lombok.Getter;
 import org.danielsa.proiect_ps.models.User;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class DatabaseService {
@@ -91,6 +87,41 @@ public class DatabaseService {
         return users;
     }
 
+    public User updateUser(String username, String newUsername, String newPassword, String newUserType) {
+        String query = "UPDATE users SET username = ?, password = ?, usertype = ? WHERE username = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, newUsername);
+            statement.setString(2, newPassword);
+            statement.setString(3, newUserType);
+            statement.setString(4, username);
+
+            int rowsAffected = statement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                return new User(newUsername, newUserType, getUser().getGamesWon());
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public boolean deleteUser(String username) {
+        String query = "DELETE FROM users WHERE username = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, username);
+
+            int rowsAffected = statement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
     public void updateUserScore() {
         String query = "UPDATE users SET gameswon = gameswon + 1 WHERE username = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -99,5 +130,24 @@ public class DatabaseService {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public User getUserByUsername(String username) {
+        String query = "SELECT * FROM users WHERE username = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, username);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                String usrN = resultSet.getString("username");
+                String usrT = resultSet.getString("userType");
+                int gamesWon = resultSet.getInt("gameswon");
+                return new User(usrN, usrT, gamesWon);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 }

@@ -4,7 +4,6 @@ import jakarta.inject.Inject;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -17,7 +16,7 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import org.danielsa.proiect_ps.models.User;
 import org.danielsa.proiect_ps.models.UserType;
-import org.danielsa.proiect_ps.models.ViewInterface;
+import org.danielsa.proiect_ps.models.GameViewInterface;
 import org.danielsa.proiect_ps.presenters.DatabaseService;
 import org.danielsa.proiect_ps.presenters.GamePresenter;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.ArrayList;
 
-public class GameView implements ViewInterface {
+public class GameView implements GameViewInterface {
     public ChoiceBox<String> colorSelectChoiceBox;
     public ChoiceBox<String> levelSelectChoiceBox;
     public Button startGameButton;
@@ -80,7 +79,9 @@ public class GameView implements ViewInterface {
 
     public void clickedBoard(MouseEvent mouseEvent) {
         EventTarget source = mouseEvent.getTarget();
-        if(!(source instanceof ImageView)) return;
+        if(!(source instanceof ImageView)){
+          return;
+        }
         selectedImage = (ImageView)source;
         int row = GridPane.getRowIndex(selectedImage);
         int col = GridPane.getColumnIndex(selectedImage);
@@ -98,7 +99,9 @@ public class GameView implements ViewInterface {
         String color = selectedColor.toLowerCase().charAt(0) + "";
         presenter.setPlayerColor(color);
         setButtonImages(color);
-        if(null != board) board.setVisible(false);
+        if(board != null){
+            board.setVisible(false);
+        }
         String selectedBoard = levelSelectChoiceBox.getValue();
         if(selectedBoard.equals("4x4")) {
             board = smallBoard;
@@ -131,26 +134,30 @@ public class GameView implements ViewInterface {
         File img = new File(imageName);
         Image image = new Image(img.toURI().toString());
 
-        for(Node node : board.getChildren()) {
-            if(node instanceof ImageView) {
-                if(GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column) {
-                    ((ImageView) node).setImage(image);
-                    break;
-                }
-            }
-        }
+        board.getChildren().stream()
+                .filter(node -> node instanceof ImageView)
+                .map(node -> (ImageView) node)
+                .filter(imageView -> {
+                    Integer rowIdx = GridPane.getRowIndex(imageView);
+                    Integer colIdx = GridPane.getColumnIndex(imageView);
+                    return rowIdx != null && colIdx != null && rowIdx == row && colIdx == column;
+                })
+                .findFirst()
+                .ifPresent(imageView -> imageView.setImage(image));
     }
 
     @Override
     public void removeArrow(int row, int column) {
-        for(Node node : board.getChildren()) {
-            if(node instanceof ImageView) {
-                if(GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column) {
-                    ((ImageView) node).setImage(null);
-                    break;
-                }
-            }
-        }
+        board.getChildren().stream()
+                .filter(node -> node instanceof ImageView)
+                .map(node -> (ImageView) node)
+                .filter(imageView -> {
+                    Integer rowIdx = GridPane.getRowIndex(imageView);
+                    Integer colIdx = GridPane.getColumnIndex(imageView);
+                    return rowIdx != null && colIdx != null && rowIdx == row && colIdx == column;
+                })
+                .findFirst()
+                .ifPresent(imageView -> imageView.setImage(null));
     }
 
     @Override
@@ -163,7 +170,10 @@ public class GameView implements ViewInterface {
         dialog.centerOnScreen();
         VBox dialogVbox = new VBox(20);
         dialogVbox.setAlignment(Pos.CENTER);
-        dialogVbox.getChildren().add(new Text("No more possible moves. \n " + winner + " wins!"));
+        if(winner.equals("User")){
+            winner = databaseService.getUser().getUserName();
+        }
+        dialogVbox.getChildren().add(new Text(winner.toUpperCase() + " wins!"));
         Scene dialogScene = new Scene(dialogVbox, 150, 100);
         dialogVbox.setOnMouseClicked(mouseEvent -> {
             dialog.close(); clearBoard();
@@ -197,12 +207,12 @@ public class GameView implements ViewInterface {
     }
 
     private void clearBoard(){
-        if(null == board) return;
-        presenter.clearBoard();
-        for(Node node : board.getChildren()) {
-            if(node instanceof ImageView) {
-                ((ImageView) node).setImage(null);
-            }
+        if(board != null){
+            presenter.clearBoard();
+            board.getChildren().stream()
+                    .filter(node -> node instanceof ImageView)
+                    .map(node -> (ImageView) node)
+                    .forEach(imageView -> imageView.setImage(null));
         }
     }
 
@@ -211,22 +221,19 @@ public class GameView implements ViewInterface {
     }
 
     private void setButtonImages(String color) {
-        BackgroundImage nImage = new BackgroundImage(new Image(new File("/Users/daniellungu/Desktop/PROIECT_PS/src/main/resources/images/" + color + "N.png").toURI().toString()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-        BackgroundImage neImage = new BackgroundImage(new Image(new File("/Users/daniellungu/Desktop/PROIECT_PS/src/main/resources/images/" + color + "NE.png").toURI().toString()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-        BackgroundImage eImage = new BackgroundImage(new Image(new File("/Users/daniellungu/Desktop/PROIECT_PS/src/main/resources/images/" + color + "E.png").toURI().toString()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-        BackgroundImage seImage = new BackgroundImage(new Image(new File("/Users/daniellungu/Desktop/PROIECT_PS/src/main/resources/images/" + color + "SE.png").toURI().toString()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-        BackgroundImage sImage = new BackgroundImage(new Image(new File("/Users/daniellungu/Desktop/PROIECT_PS/src/main/resources/images/" + color + "S.png").toURI().toString()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-        BackgroundImage swImage = new BackgroundImage(new Image(new File("/Users/daniellungu/Desktop/PROIECT_PS/src/main/resources/images/" + color + "SW.png").toURI().toString()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-        BackgroundImage wImage = new BackgroundImage(new Image(new File("/Users/daniellungu/Desktop/PROIECT_PS/src/main/resources/images/" + color + "W.png").toURI().toString()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-        BackgroundImage nwImage = new BackgroundImage(new Image(new File("/Users/daniellungu/Desktop/PROIECT_PS/src/main/resources/images/" + color + "NW.png").toURI().toString()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-        northButton.setBackground(new Background(nImage));
-        northEastButton.setBackground(new Background(neImage));
-        eastButton.setBackground(new Background(eImage));
-        southEastButton.setBackground(new Background(seImage));
-        southButton.setBackground(new Background(sImage));
-        southWestButton.setBackground(new Background(swImage));
-        westButton.setBackground(new Background(wImage));
-        northWestButton.setBackground(new Background(nwImage));
+        northButton.setBackground(setBgImage(color,"N.png"));
+        northEastButton.setBackground(setBgImage(color,"NE.png"));
+        eastButton.setBackground(setBgImage(color,"E.png"));
+        southEastButton.setBackground(setBgImage(color,"SE.png"));
+        southButton.setBackground(setBgImage(color,"S.png"));
+        southWestButton.setBackground(setBgImage(color,"SW.png"));
+        westButton.setBackground(setBgImage(color,"W.png"));
+        northWestButton.setBackground(setBgImage(color,"NW.png"));
+    }
+
+    private Background setBgImage(String color, String name){
+        BackgroundImage b = new BackgroundImage(new Image(new File("/Users/daniellungu/Desktop/PROIECT_PS/src/main/resources/images/" + color + name).toURI().toString()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        return new Background(b);
     }
 
     public void loadUserList() {

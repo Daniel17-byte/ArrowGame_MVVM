@@ -1,6 +1,8 @@
 package org.danielsa.proiect_ps.models;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class MinMaxStrategy {
     private final int maxDepth;
@@ -16,48 +18,44 @@ public class MinMaxStrategy {
     }
 
     public Move makeMove(GameBoardInterface board) {
-        Move bestMove = null;
-        int max = 0;
-        List<Move> randomMoves = getNElements(board.getValidMoves(), maxMoves);
-        if (randomMoves.isEmpty()) {
-            return null;
-        }
-        for(Move move : randomMoves) {
-            board.makeMove(move);
-            int val = maxValue(board, 0);
-            if(val > max) {
-                max = val;
-                bestMove = move;
-            }
-            board.undoMove(move);
-        }
-        return bestMove;
+        return board.getValidMoves().stream()
+                .limit(maxMoves)
+                .map(move -> {
+                    board.makeMove(move);
+                    int val = maxValue(board, 0);
+                    board.undoMove(move);
+                    return new AbstractMap.SimpleEntry<>(move, val);
+                })
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse(null);
     }
 
     private int minValue(GameBoardInterface board, int level) {
-        if(level == maxDepth) return evaluationFunction(board);
-        int min = 64;
-        List<Move> randomMoves = getNElements(board.getValidMoves(), maxMoves);
-        for(Move move : randomMoves) {
-            board.makeMove(move);
-            int val = maxValue(board, level + 1);
-            if(val < min) min = val;
-            board.undoMove(move);
-        }
-        return min;
+        if (level == maxDepth) return evaluationFunction(board);
+
+        return getNElements(board.getValidMoves(), maxMoves).stream()
+                .mapToInt(move -> {
+                    board.makeMove(move);
+                    int val = maxValue(board, level + 1);
+                    board.undoMove(move);
+                    return val;
+                })
+                .min()
+                .orElse(64);
     }
 
     private int maxValue(GameBoardInterface board, int level) {
         if(level == maxDepth) return evaluationFunction(board);
-        int max = 0;
-        List<Move> randomMoves = getNElements(board.getValidMoves(), maxMoves);
-        for(Move move : randomMoves) {
-            board.makeMove(move);
-            int val = minValue(board, level + 1);
-            if(val > max) max = val;
-            board.undoMove(move);
-        }
-        return max;
+        return getNElements(board.getValidMoves(), maxMoves).stream()
+                .mapToInt(move -> {
+                    board.makeMove(move);
+                    int val = minValue(board, level + 1);
+                    board.undoMove(move);
+                    return val;
+                })
+                .max()
+                .orElse(0);
     }
 
     private ArrayList<Move> getNElements(ArrayList<Move> source, int n) {
@@ -69,15 +67,15 @@ public class MinMaxStrategy {
             indices.add(i);
         }
 
-        for (int i = 0; i < n; i++) {
-            if (indices.isEmpty()) {
-                break;
-            }
-            int randomIndex = rand.nextInt(indices.size());
-            int sourceIndex = indices.get(randomIndex);
-            destination.add(source.get(sourceIndex));
-            indices.remove(randomIndex);
-        }
+        IntStream.range(0, n)
+                .filter(i -> !indices.isEmpty())
+                .forEach(i -> {
+                    int randomIndex = rand.nextInt(indices.size());
+                    int sourceIndex = indices.get(randomIndex);
+                    destination.add(source.get(sourceIndex));
+                    indices.remove(randomIndex);
+                });
+
         return destination;
     }
 

@@ -4,15 +4,15 @@ import lombok.Getter;
 
 import java.util.Stack;
 
-public class Game implements GameModelInterface {
-    private final ComputerPlayer systemPlayer;
+@Getter
+public class GameModel implements GameModelInterface {
+    private final ComputerPlayer computer;
     private final UserPlayer player;
-    @Getter
     private GameBoardInterface board;
     private final Stack<Move> moveStack;
 
-    public Game(ComputerPlayer systemPlayer, UserPlayer player, GameBoardInterface board) {
-        this.systemPlayer = systemPlayer;
+    public GameModel(ComputerPlayer computer, UserPlayer player, GameBoardInterface board) {
+        this.computer = computer;
         this.player = player;
         this.board = board;
         this.moveStack = new Stack<>();
@@ -29,14 +29,14 @@ public class Game implements GameModelInterface {
     @Override
     public void changePlayerColor(UserPlayer player, String color) {
         if (!player.getColor().equals(color)) {
-            systemPlayer.setColor(player.getColor());
+            computer.setColor(player.getColor());
             player.setColor(color);
         }
     }
 
     @Override
     public Move getSystemMove() {
-        Move move = systemPlayer.makeMove(new GameBoard((GameBoard)(this.board)));
+        Move move = computer.makeMove(new GameBoardModel((GameBoardModel) (this.board)));
         if (move != null) {
             moveStack.push(move);
             board.makeMove(move);
@@ -58,11 +58,6 @@ public class Game implements GameModelInterface {
     }
 
     @Override
-    public ComputerPlayer getSystemPlayer() {
-        return this.systemPlayer;
-    }
-
-    @Override
     public boolean isEndgame() {
         return this.board.noValidMoves() == 0;
     }
@@ -81,7 +76,7 @@ public class Game implements GameModelInterface {
     public void changeBoardSize(int size) {
         if(this.board.getSize() == size)
             return;
-        this.board = new GameBoard(size);
+        this.board = new GameBoardModel(size);
     }
 
 }
