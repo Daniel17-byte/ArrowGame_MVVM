@@ -1,19 +1,15 @@
 package org.danielsa.proiect_ps.views;
 
 import jakarta.inject.Inject;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import lombok.Getter;
-import org.danielsa.proiect_ps.Main;
 import org.danielsa.proiect_ps.models.*;
 import org.danielsa.proiect_ps.presenters.DatabaseService;
-import org.danielsa.proiect_ps.presenters.RegisterPresenter;
-
-import java.io.IOException;
+import org.danielsa.proiect_ps.presenters.LoginPresenter;
 
 @Getter
 public class LoginView extends Scene implements LoginViewInterface {
@@ -23,12 +19,15 @@ public class LoginView extends Scene implements LoginViewInterface {
     private Label resultLabel;
     private Button registerButton;
 
+    private final LoginPresenter presenter;
+
     @Inject
     private final DatabaseService databaseService;
 
     public LoginView(DatabaseService databaseService) {
         super(new VBox(), 300, 200);
         this.databaseService = databaseService;
+        this.presenter = new LoginPresenter(this);
         initComponents();
     }
 
@@ -48,6 +47,13 @@ public class LoginView extends Scene implements LoginViewInterface {
 
         registerButton = new Button("Register");
 
+        loginButton.setOnAction(event -> {
+            String username = usernameField.getText();
+            String password = passwordField.getText();
+            boolean authenticated = presenter.getModel().authenticate(username, password);
+            presenter.getView().showLoginResult(authenticated);
+        });
+
         registerButton.setOnAction(event -> openRegisterWindow());
 
         resultLabel = new Label();
@@ -55,39 +61,16 @@ public class LoginView extends Scene implements LoginViewInterface {
         root.getChildren().addAll(usernameField, passwordField, loginButton, resultLabel, registerButton);
     }
 
-    @Override
-    public void setOnLoginAttempt(LoginAttemptHandler handler) {
-        loginButton.setOnAction(event -> {
-            String username = usernameField.getText();
-            String password = passwordField.getText();
-            handler.onLoginAttempt(username, password);
-        });
-    }
-
+    @SuppressWarnings("CastCanBeRemovedNarrowingVariableType")
     @Override
     public void showLoginResult(boolean success) {
         if (success) {
-            Stage primaryStage = (Stage) this.getWindow();
+            GameViewInterface view = new GameView(getDatabaseService());
+            Stage gameStage = new Stage();
 
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view.fxml"));
-                Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-
-                primaryStage.setScene(scene);
-                primaryStage.setTitle("Arrow Game");
-
-                primaryStage.show();
-
-                GameView gameView = fxmlLoader.getController();
-                gameView.setDatabaseService(databaseService);
-                if (gameView.getDatabaseService().getUser().getUserType().equals(UserType.ADMIN)){
-                    gameView.loadUserList();
-                }
-                gameView.loadWonGames();
-
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
+            gameStage.setScene((GameView) view);
+            gameStage.setTitle("Arrow Game");
+            gameStage.show();
         } else {
             resultLabel.setText("Login failed. Please try again.");
         }
@@ -97,14 +80,9 @@ public class LoginView extends Scene implements LoginViewInterface {
     @Override
     public void openRegisterWindow() {
         RegisterViewInterface view = new RegisterView(databaseService);
-        RegisterModelInterface model = new RegisterModel(databaseService);
-        @SuppressWarnings("unused")
-        RegisterPresenter presenter = new RegisterPresenter(view, model);
-
         Stage registerStage = new Stage();
 
         registerStage.setScene((RegisterView) view);
-
         registerStage.setTitle("Register");
         registerStage.show();
     }

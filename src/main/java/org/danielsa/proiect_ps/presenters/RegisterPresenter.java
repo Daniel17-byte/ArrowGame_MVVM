@@ -1,24 +1,19 @@
 package org.danielsa.proiect_ps.presenters;
 
+import lombok.Getter;
+import org.danielsa.proiect_ps.models.RegisterModel;
 import org.danielsa.proiect_ps.models.RegisterModelInterface;
 import org.danielsa.proiect_ps.models.RegisterViewInterface;
+import org.danielsa.proiect_ps.views.RegisterView;
 
+@Getter
 public class RegisterPresenter {
     private final RegisterViewInterface view;
     private final RegisterModelInterface model;
 
-    public RegisterPresenter(RegisterViewInterface view, RegisterModelInterface model) {
+    public RegisterPresenter(RegisterView view) {
         this.view = view;
-        this.model = model;
-        initView();
+        this.model = new RegisterModel(view.getDatabaseService());
     }
 
-    private void initView() {
-        view.setOnRegisterAttempt(this::handleRegisterAttempt);
-    }
-
-    private void handleRegisterAttempt(String username, String password, String usertype) {
-        boolean authenticated = model.register(username, password, usertype);
-        view.showRegisterResult(authenticated);
-    }
 }

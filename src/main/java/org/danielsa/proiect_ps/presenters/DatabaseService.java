@@ -130,6 +130,7 @@ public class DatabaseService {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        user = getUserByUsername(user.getUserName());
     }
 
     public User getUserByUsername(String username) {

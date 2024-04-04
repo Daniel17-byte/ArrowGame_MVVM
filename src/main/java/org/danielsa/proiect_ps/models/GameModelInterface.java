@@ -10,5 +10,4 @@ public interface GameModelInterface {
     ComputerPlayer getComputer();
     boolean isEndgame();
     void clearBoard();
-    boolean checksExistingValidMoves();
 }

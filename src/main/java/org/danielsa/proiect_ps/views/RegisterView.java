@@ -1,7 +1,6 @@
 package org.danielsa.proiect_ps.views;
 
 import jakarta.inject.Inject;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -10,12 +9,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.Getter;
-import org.danielsa.proiect_ps.Main;
-import org.danielsa.proiect_ps.models.RegisterAttemptHandler;
+import org.danielsa.proiect_ps.models.GameViewInterface;
 import org.danielsa.proiect_ps.models.RegisterViewInterface;
 import org.danielsa.proiect_ps.presenters.DatabaseService;
-
-import java.io.IOException;
+import org.danielsa.proiect_ps.presenters.RegisterPresenter;
 
 @Getter
 public class RegisterView extends Scene implements RegisterViewInterface {
@@ -25,12 +22,15 @@ public class RegisterView extends Scene implements RegisterViewInterface {
     private Button registerButton;
     private Label resultLabel;
 
+    private final RegisterPresenter presenter;
+
     @Inject
     private final DatabaseService databaseService;
 
     public RegisterView(DatabaseService databaseService) {
         super(new VBox(), 300, 200);
         this.databaseService = databaseService;
+        this.presenter = new RegisterPresenter(this);
         initComponents();
     }
 
@@ -49,42 +49,29 @@ public class RegisterView extends Scene implements RegisterViewInterface {
 
         registerButton = new Button("Register");
 
+        registerButton.setOnAction(event -> {
+            String username = usernameField.getText();
+            String password = passwordField.getText();
+            String userType = userTypeField.getText();
+            boolean authenticated = presenter.getModel().register(username, password, userType);
+            presenter.getView().showRegisterResult(authenticated);
+        });
+
         resultLabel = new Label();
 
         root.getChildren().addAll(usernameField, passwordField, userTypeField, registerButton);
     }
 
-    @Override
-    public void setOnRegisterAttempt(RegisterAttemptHandler handler) {
-        registerButton.setOnAction(event -> {
-            String username = usernameField.getText();
-            String password = passwordField.getText();
-            String userType = userTypeField.getText();
-            handler.onRegisterAttempt(username, password, userType);
-        });
-    }
-
+    @SuppressWarnings("CastCanBeRemovedNarrowingVariableType")
     @Override
     public void showRegisterResult(boolean success) {
         if (success) {
-            Stage primaryStage = (Stage) this.getWindow();
+            GameViewInterface view = new GameView(getDatabaseService());
+            Stage gameStage = new Stage();
 
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view.fxml"));
-                Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-
-                primaryStage.setScene(scene);
-                primaryStage.setTitle("Arrow Game");
-
-                primaryStage.show();
-
-                GameView gameView = fxmlLoader.getController();
-                gameView.setDatabaseService(databaseService);
-                gameView.loadWonGames();
-
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
+            gameStage.setScene((GameView) view);
+            gameStage.setTitle("Arrow Game");
+            gameStage.show();
         } else {
             resultLabel.setText("Register failed. Please try again.");
         }

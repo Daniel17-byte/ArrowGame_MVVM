@@ -1,24 +1,27 @@
 package org.danielsa.proiect_ps;
 
+import jakarta.inject.Inject;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.io.IOException;
+import org.danielsa.proiect_ps.models.LoginViewInterface;
+import org.danielsa.proiect_ps.presenters.DatabaseService;
+import org.danielsa.proiect_ps.views.LoginView;
 
 public class Main extends Application {
+    @Inject
+    private final DatabaseService databaseService = new DatabaseService();
 
+    @SuppressWarnings("CastCanBeRemovedNarrowingVariableType")
     @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-        stage.setTitle("Arrow Game");
-        stage.setScene(scene);
-        stage.show();
+    public void start(Stage primaryStage) {
+        LoginViewInterface view = new LoginView(databaseService);
+
+        primaryStage.setScene((LoginView) view);
+        primaryStage.setTitle("Login");
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 }

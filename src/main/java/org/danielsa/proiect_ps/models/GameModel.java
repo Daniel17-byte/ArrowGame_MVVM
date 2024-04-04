@@ -68,11 +68,6 @@ public class GameModel implements GameModelInterface {
         moveStack.clear();
     }
 
-    @Override
-    public boolean checksExistingValidMoves() {
-        return !this.board.getValidMoves().isEmpty();
-    }
-
     public void changeBoardSize(int size) {
         if(this.board.getSize() == size)
             return;

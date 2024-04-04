@@ -9,13 +9,11 @@ public class GamePresenter {
     public GamePresenter(GameViewInterface view) {
         this.view = view;
         model = new GameModel(new ComputerPlayer("r"), new UserPlayer("g"), new GameBoardModel(8));
-        model.getComputer().setStrategy(new MinMaxStrategy(2, 10));
+        model.getComputer().setStrategy(new MinMaxStrategy(4, 10));
     }
 
     public void userRegisterMove(String direction, int row, int column) {
         boolean valid = model.makeUserMove(new Move(row, column, new Arrow(model.getUserPlayer().getColor(), direction)));
-
-        System.out.println(model.checksExistingValidMoves());
 
         if(!valid) {
             view.signalInvalidMove();
