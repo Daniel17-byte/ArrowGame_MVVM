@@ -10,6 +10,7 @@ public interface GameViewInterface {
     void clickedUndoButton(MouseEvent mouseEvent);
     void clickedRestartButton(MouseEvent mouseEvent);
     void clickedStartGame(MouseEvent mouseEvent);
+    void clickedManageUsersButton(MouseEvent mouseEvent);
     void loadUserList();
     void loadWonGames();
 }

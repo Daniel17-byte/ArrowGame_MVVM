@@ -42,6 +42,7 @@ public class GameView extends Scene implements GameViewInterface {
     private final Button startGameButton = new Button("Start Game");
     private final Button restartButton = new Button("Restart Game");
     private final Button undoButton = new Button("Undo");
+    private final Button manageUsersButton = new Button("Manage Users");
     private final Button northButton = new Button();
     private final Button southButton = new Button();
     private final Button eastButton = new Button();
@@ -168,27 +169,28 @@ public class GameView extends Scene implements GameViewInterface {
     private VBox createRightPane() {
         VBox rightPanel = new VBox();
 
-        AnchorPane rightPane = new AnchorPane();
+        BorderPane rightPane = new BorderPane();
         rightPane.setPrefSize(200, 500);
         rightPane.setStyle("-fx-background-color: grey;");
 
         gamesWonText.setText("Games won : ");
         gamesWonText.setEditable(false);
         gamesWonText.setPrefSize(180, 30);
-        AnchorPane.setTopAnchor(gamesWonText, 20.0);
-        AnchorPane.setLeftAnchor(gamesWonText, 10.0);
-
-        rightPane.getChildren().addAll(gamesWonText);
+        BorderPane.setMargin(gamesWonText, new Insets(20, 0, 0, 10));
+        rightPane.setTop(gamesWonText);
 
         loadWonGames();
 
         if (databaseService.getUser().getUserType().equals(UserType.ADMIN)) {
             usersPane.setEditable(false);
             usersPane.setPrefSize(180, 300);
-            AnchorPane.setTopAnchor(usersPane, 60.0);
-            AnchorPane.setLeftAnchor(usersPane, 10.0);
-            rightPane.getChildren().addAll(usersPane);
+            BorderPane.setMargin(usersPane, new Insets(10, 0, 0, 10));
+            rightPane.setCenter(usersPane);
             loadUserList();
+
+            manageUsersButton.setOnMouseClicked(this::clickedManageUsersButton);
+            rightPane.setBottom(manageUsersButton);
+            BorderPane.setMargin(manageUsersButton, new Insets(10, 0, 0, 10));
         }
 
         rightPanel.getChildren().add(rightPane);
@@ -429,7 +431,6 @@ public class GameView extends Scene implements GameViewInterface {
         borderPane.getCenter().setStyle("-fx-background-color: #9db98a;");
     }
 
-
     @Override
     public void clickedUndoButton(MouseEvent mouseEvent) {
         presenter.undoMove();
@@ -450,4 +451,14 @@ public class GameView extends Scene implements GameViewInterface {
         usersPane.setText(stringBuilder.toString());
     }
 
+    @SuppressWarnings("CastCanBeRemovedNarrowingVariableType")
+    @Override
+    public void clickedManageUsersButton(MouseEvent mouseEvent) {
+        AdminViewInterface view = new AdminView(getDatabaseService());
+        Stage adminStage = new Stage();
+
+        adminStage.setScene((AdminView) view);
+        adminStage.setTitle("Admin Panel");
+        adminStage.show();
+    }
 }
