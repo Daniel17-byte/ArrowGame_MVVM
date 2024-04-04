@@ -5,14 +5,19 @@ import org.danielsa.proiect_ps.DatabaseService;
 
 public class LoginModel implements LoginModelInterface{
     @Inject
-    private final DatabaseService authService;
+    private final DatabaseService databaseService;
 
-    public LoginModel(DatabaseService authService) {
-        this.authService = authService;
+    public LoginModel(DatabaseService databaseService) {
+        this.databaseService = databaseService;
     }
 
     @Override
     public boolean authenticate(String username, String password) {
-        return authService.authenticate(username, password);
+        return databaseService.authenticate(username, password);
+    }
+
+    @Override
+    public DatabaseService getDatabaseService() {
+        return this.databaseService;
     }
 }
