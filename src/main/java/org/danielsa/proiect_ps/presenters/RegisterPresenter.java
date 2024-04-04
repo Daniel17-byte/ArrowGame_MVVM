@@ -3,7 +3,7 @@ package org.danielsa.proiect_ps.presenters;
 import lombok.Getter;
 import org.danielsa.proiect_ps.models.RegisterModel;
 import org.danielsa.proiect_ps.models.RegisterModelInterface;
-import org.danielsa.proiect_ps.models.RegisterViewInterface;
+import org.danielsa.proiect_ps.views.RegisterViewInterface;
 import org.danielsa.proiect_ps.views.RegisterView;
 
 @Getter

@@ -17,10 +17,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
-import org.danielsa.proiect_ps.models.GameViewInterface;
 import org.danielsa.proiect_ps.models.User;
 import org.danielsa.proiect_ps.models.UserType;
-import org.danielsa.proiect_ps.presenters.DatabaseService;
+import org.danielsa.proiect_ps.DatabaseService;
 import org.danielsa.proiect_ps.presenters.GamePresenter;
 import org.jetbrains.annotations.NotNull;
 
@@ -277,7 +276,6 @@ public class GameView extends Scene implements GameViewInterface {
         User user = databaseService.getUser();
         int gamesWon = user.getGamesWon();
         if (user.getUserType().equals(UserType.PLAYER)) {
-            System.out.println(gamesWon);
             gamesWonText.setText("Games won : " + gamesWon);
             usersPane.setVisible(false);
         }else {

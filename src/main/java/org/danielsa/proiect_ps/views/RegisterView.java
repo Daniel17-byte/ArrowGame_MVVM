@@ -9,9 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.Getter;
-import org.danielsa.proiect_ps.models.GameViewInterface;
-import org.danielsa.proiect_ps.models.RegisterViewInterface;
-import org.danielsa.proiect_ps.presenters.DatabaseService;
+import org.danielsa.proiect_ps.DatabaseService;
 import org.danielsa.proiect_ps.presenters.RegisterPresenter;
 
 @Getter

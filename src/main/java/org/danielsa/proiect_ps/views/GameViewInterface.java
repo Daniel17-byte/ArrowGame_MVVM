@@ -1,4 +1,4 @@
-package org.danielsa.proiect_ps.models;
+package org.danielsa.proiect_ps.views;
 
 import javafx.scene.input.MouseEvent;
 

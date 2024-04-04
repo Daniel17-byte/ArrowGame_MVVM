@@ -7,8 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import lombok.Getter;
-import org.danielsa.proiect_ps.models.*;
-import org.danielsa.proiect_ps.presenters.DatabaseService;
+import org.danielsa.proiect_ps.DatabaseService;
 import org.danielsa.proiect_ps.presenters.LoginPresenter;
 
 @Getter

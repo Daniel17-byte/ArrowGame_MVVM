@@ -1,6 +1,7 @@
 package org.danielsa.proiect_ps.presenters;
 
 import org.danielsa.proiect_ps.models.*;
+import org.danielsa.proiect_ps.views.GameViewInterface;
 
 public class GamePresenter {
     private final GameViewInterface view;

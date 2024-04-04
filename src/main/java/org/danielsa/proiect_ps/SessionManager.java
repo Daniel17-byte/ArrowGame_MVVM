@@ -1,4 +1,4 @@
-package org.danielsa.proiect_ps.presenters;
+package org.danielsa.proiect_ps;
 
 import org.danielsa.proiect_ps.models.User;
 

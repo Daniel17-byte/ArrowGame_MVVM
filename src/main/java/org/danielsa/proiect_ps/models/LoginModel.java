@@ -1,7 +1,7 @@
 package org.danielsa.proiect_ps.models;
 
 import jakarta.inject.Inject;
-import org.danielsa.proiect_ps.presenters.DatabaseService;
+import org.danielsa.proiect_ps.DatabaseService;
 
 public class LoginModel implements LoginModelInterface{
     @Inject
