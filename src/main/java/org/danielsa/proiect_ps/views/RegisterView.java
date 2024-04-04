@@ -7,21 +7,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import lombok.Getter;
 import org.danielsa.proiect_ps.DatabaseService;
 import org.danielsa.proiect_ps.presenters.RegisterPresenter;
 
 @Getter
 public class RegisterView extends Scene implements RegisterViewInterface {
-    private TextField usernameField;
-    private PasswordField passwordField;
-    private TextField userTypeField;
-    private Button registerButton;
-    private Label resultLabel;
-
     private final RegisterPresenter presenter;
-
     @Inject
     private final DatabaseService databaseService;
 
@@ -34,6 +26,12 @@ public class RegisterView extends Scene implements RegisterViewInterface {
 
     @Override
     public void initComponents() {
+        TextField usernameField;
+        PasswordField passwordField;
+        TextField userTypeField;
+        Button registerButton;
+        Label resultLabel = new Label();
+
         VBox root = (VBox) getRoot();
         root.setSpacing(10);
         usernameField = new TextField();
@@ -51,27 +49,10 @@ public class RegisterView extends Scene implements RegisterViewInterface {
             String username = usernameField.getText();
             String password = passwordField.getText();
             String userType = userTypeField.getText();
-            boolean authenticated = presenter.getModel().register(username, password, userType);
-            presenter.getView().showRegisterResult(authenticated);
+            boolean authenticated = presenter.register(username, password, userType);
+            presenter.showRegisterResult(resultLabel, authenticated);
         });
 
-        resultLabel = new Label();
-
         root.getChildren().addAll(usernameField, passwordField, userTypeField, registerButton);
-    }
-
-    @SuppressWarnings("CastCanBeRemovedNarrowingVariableType")
-    @Override
-    public void showRegisterResult(boolean success) {
-        if (success) {
-            GameViewInterface view = new GameView(getDatabaseService());
-            Stage gameStage = new Stage();
-
-            gameStage.setScene((GameView) view);
-            gameStage.setTitle("Arrow Game");
-            gameStage.show();
-        } else {
-            resultLabel.setText("Register failed. Please try again.");
-        }
     }
 }

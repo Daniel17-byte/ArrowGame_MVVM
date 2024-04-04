@@ -5,14 +5,19 @@ import org.danielsa.proiect_ps.DatabaseService;
 
 public class RegisterModel implements RegisterModelInterface{
     @Inject
-    private final DatabaseService authService;
+    private final DatabaseService databaseService;
 
     public RegisterModel(DatabaseService authService) {
-        this.authService = authService;
+        this.databaseService = authService;
     }
 
     @Override
     public boolean register(String username, String password, String usertype) {
-        return authService.register(username, password, usertype);
+        return databaseService.register(username, password, usertype);
+    }
+
+    @Override
+    public DatabaseService getDatabaseService() {
+        return databaseService;
     }
 }
