@@ -1,16 +1,18 @@
 package org.danielsa.proiect_ps.views;
 
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.layout.GridPane;
+import org.danielsa.proiect_ps.DatabaseService;
 
 public interface GameViewInterface {
-    void placeArrow(String color, String direction, int row, int column);
-    void removeArrow(int row, int column);
-    void signalEndgame(String winner);
-    void signalInvalidMove();
-    void clickedUndoButton(MouseEvent mouseEvent);
-    void clickedRestartButton(MouseEvent mouseEvent);
-    void clickedStartGame(MouseEvent mouseEvent);
-    void clickedManageUsersButton(MouseEvent mouseEvent);
-    void loadUserList();
-    void loadWonGames();
+    DatabaseService getDatabaseService();
+    void setSelectedDirection(String text);
+    String getSelectedDirection();
+    void setBoard(GridPane board);
+    GridPane getBoard();
+    void setSmallBoard(GridPane smallBoard);
+    void setLargeBoard(GridPane smallBoard);
+    GridPane getSmallBoard();
+    GridPane getLargeBoard();
+    ChoiceBox<String> getLevelSelectChoiceBox();
 }

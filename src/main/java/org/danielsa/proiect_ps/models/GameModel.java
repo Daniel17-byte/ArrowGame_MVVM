@@ -1,6 +1,8 @@
 package org.danielsa.proiect_ps.models;
 
+import jakarta.inject.Inject;
 import lombok.Getter;
+import org.danielsa.proiect_ps.DatabaseService;
 
 import java.util.Stack;
 
@@ -10,11 +12,14 @@ public class GameModel implements GameModelInterface {
     private final UserPlayer player;
     private GameBoardInterface board;
     private final Stack<Move> moveStack;
+    @Inject
+    private final DatabaseService databaseService;
 
-    public GameModel(ComputerPlayer computer, UserPlayer player, GameBoardInterface board) {
+    public GameModel(ComputerPlayer computer, UserPlayer player, GameBoardInterface board, DatabaseService databaseService) {
         this.computer = computer;
         this.player = player;
         this.board = board;
+        this.databaseService = databaseService;
         this.moveStack = new Stack<>();
     }
 
@@ -72,6 +77,11 @@ public class GameModel implements GameModelInterface {
         if(this.board.getSize() == size)
             return;
         this.board = new GameBoardModel(size);
+    }
+
+    @Override
+    public DatabaseService getDatabaseService() {
+        return databaseService;
     }
 
 }

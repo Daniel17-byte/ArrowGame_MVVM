@@ -1,5 +1,7 @@
 package org.danielsa.proiect_ps.models;
 
+import org.danielsa.proiect_ps.DatabaseService;
+
 public interface GameModelInterface {
     boolean makeUserMove(Move move);
     void changePlayerColor(UserPlayer player, String color);
@@ -10,4 +12,5 @@ public interface GameModelInterface {
     ComputerPlayer getComputer();
     boolean isEndgame();
     void clearBoard();
+    DatabaseService getDatabaseService();
 }
