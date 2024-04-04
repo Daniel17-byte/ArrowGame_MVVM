@@ -192,7 +192,7 @@ public class GameView extends Scene implements GameViewInterface {
         }
 
         rightPanel.getChildren().add(rightPane);
-        VBox.setMargin(rightPane, new Insets(0, 0, 0, 10));
+        VBox.setMargin(rightPane, new Insets(0, 0, 0, 0));
         BorderPane.setAlignment(rightPane, Pos.CENTER_RIGHT);
 
         return rightPanel;
@@ -237,6 +237,7 @@ public class GameView extends Scene implements GameViewInterface {
         getBoard().setVisible(true);
         setBoard(largeBoard);
         borderPane.setCenter(board);
+        borderPane.getCenter().setStyle("-fx-background-color: #9db98a;");
         borderPane.setVisible(true);
 
         return centerPanel;
@@ -388,7 +389,9 @@ public class GameView extends Scene implements GameViewInterface {
         });
         dialog.setScene(dialogScene);
         dialog.show();
-        databaseService.updateUserScore();
+        if (!winner.equalsIgnoreCase("COMPUTER")){
+            databaseService.updateUserScore();
+        }
         loadWonGames();
     }
 
@@ -423,6 +426,7 @@ public class GameView extends Scene implements GameViewInterface {
             setBoard(largeBoard);
             borderPane.setCenter(board);
         }
+        borderPane.getCenter().setStyle("-fx-background-color: #9db98a;");
     }
 
 
