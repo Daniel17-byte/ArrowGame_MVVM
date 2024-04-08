@@ -218,7 +218,7 @@
                     <execution>
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>org.danielsa.proiect_ps/org.danielsa.proiect_ps.views.GameView</mainClass>
+                            <mainClass>org.danielsa.proiect_ps/org.danielsa.proiect_ps.view.GameView</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

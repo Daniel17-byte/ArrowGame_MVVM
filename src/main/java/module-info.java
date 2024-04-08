@@ -18,10 +18,10 @@ module org.danielsa.proiect_ps {
     requires org.hibernate.orm.core;
 
     opens org.danielsa.proiect_ps to javafx.fxml;
-    opens org.danielsa.proiect_ps.views to javafx.fxml;
+    opens org.danielsa.proiect_ps.view to javafx.fxml;
     exports org.danielsa.proiect_ps;
-    exports org.danielsa.proiect_ps.views;
-    exports org.danielsa.proiect_ps.models;
-    exports org.danielsa.proiect_ps.presenters;
-    opens org.danielsa.proiect_ps.models to javafx.fxml;
+    exports org.danielsa.proiect_ps.view;
+    exports org.danielsa.proiect_ps.model;
+    exports org.danielsa.proiect_ps.viewmodel;
+    opens org.danielsa.proiect_ps.model to javafx.fxml;
 }

@@ -1,4 +1,4 @@
-import org.danielsa.proiect_ps.models.User;
+import org.danielsa.proiect_ps.model.User;
 import org.danielsa.proiect_ps.DatabaseService;
 import org.junit.jupiter.api.Test;
 

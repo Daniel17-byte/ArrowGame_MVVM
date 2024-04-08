@@ -1,7 +1,7 @@
 package org.danielsa.proiect_ps;
 
 import lombok.Getter;
-import org.danielsa.proiect_ps.models.User;
+import org.danielsa.proiect_ps.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;

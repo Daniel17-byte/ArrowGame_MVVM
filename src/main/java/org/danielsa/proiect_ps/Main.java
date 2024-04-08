@@ -3,8 +3,8 @@ package org.danielsa.proiect_ps;
 import jakarta.inject.Inject;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import org.danielsa.proiect_ps.views.LoginViewInterface;
-import org.danielsa.proiect_ps.views.LoginView;
+import org.danielsa.proiect_ps.view.LoginViewInterface;
+import org.danielsa.proiect_ps.view.LoginView;
 
 public class Main extends Application {
     @Inject

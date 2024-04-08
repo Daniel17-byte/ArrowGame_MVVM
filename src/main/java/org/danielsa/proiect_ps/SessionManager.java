@@ -1,6 +1,6 @@
 package org.danielsa.proiect_ps;
 
-import org.danielsa.proiect_ps.models.User;
+import org.danielsa.proiect_ps.model.User;
 
 import java.util.*;
 
