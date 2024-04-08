@@ -19,6 +19,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.danielsa.proiect_ps.Main;
 import org.danielsa.proiect_ps.model.*;
 import org.danielsa.proiect_ps.view.AdminView;
 import org.danielsa.proiect_ps.view.AdminViewInterface;
@@ -97,7 +98,7 @@ public class GameViewModel {
     }
 
     public Background setBgImage(String name){
-        BackgroundImage b = new BackgroundImage(new Image(new File("/Users/daniellungu/Desktop/PROIECT_PS/src/main/resources/images/" + "g" + name).toURI().toString()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        BackgroundImage b = new BackgroundImage(new Image(new File(Main.path + "g" + name).toURI().toString()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         return new Background(b);
     }
 
@@ -127,7 +128,7 @@ public class GameViewModel {
                     return rowIdx != null && colIdx != null && rowIdx == row && colIdx == column;
                 })
                 .findFirst()
-                .ifPresent(imageView -> imageView.setImage(new Image(new File("/Users/daniellungu/Desktop/PROIECT_PS/src/main/resources/images/img.png").toURI().toString())));
+                .ifPresent(imageView -> imageView.setImage(new Image(new File(Main.path + "img.png").toURI().toString())));
     }
 
     @SuppressWarnings("CastCanBeRemovedNarrowingVariableType")
@@ -183,6 +184,7 @@ public class GameViewModel {
 
     public void placeArrow(String color, String direction, int row, int column) {
         Image image = new Image(new File("/Users/daniellungu/Desktop/PROIECT_PS/src/main/resources/images/" + color + direction + ".png").toURI().toString());
+        Image image = new Image(new File(Main.path + color + direction + ".png").toURI().toString());
 
         view.getBoard().getChildren().stream()
                 .filter(node -> node instanceof ImageView)
@@ -259,7 +261,7 @@ public class GameViewModel {
             view.getBoard().getChildren().stream()
                     .filter(node -> node instanceof ImageView)
                     .map(node -> (ImageView) node)
-                    .forEach(imageView -> imageView.setImage(new Image(new File("/Users/daniellungu/Desktop/PROIECT_PS/src/main/resources/images/img.png").toURI().toString())));
+                    .forEach(imageView -> imageView.setImage(new Image(new File(Main.path + "img.png").toURI().toString())));
         }
         if(levelSelectChoiceBox.getValue().equals("4x4")){
             view.setBoard(view.getSmallBoard());
