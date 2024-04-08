@@ -4,18 +4,14 @@ import lombok.Getter;
 import org.danielsa.proiect_ps.model.AdminModel;
 import org.danielsa.proiect_ps.model.AdminModelInterface;
 import org.danielsa.proiect_ps.model.User;
-import org.danielsa.proiect_ps.view.AdminView;
-import org.danielsa.proiect_ps.view.AdminViewInterface;
 
 import java.util.ArrayList;
 
 @Getter
 public class AdminViewModel {
-    private final AdminViewInterface view;
     private final AdminModelInterface model;
 
-    public AdminViewModel(AdminView view) {
-        this.view = view;
+    public AdminViewModel() {
         this.model = new AdminModel();
     }
 

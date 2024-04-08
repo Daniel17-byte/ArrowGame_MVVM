@@ -9,11 +9,9 @@ import org.danielsa.proiect_ps.view.*;
 
 @Getter
 public class LoginViewModel {
-    private final LoginViewInterface view;
     private final LoginModelInterface model;
 
-    public LoginViewModel(LoginView view) {
-        this.view = view;
+    public LoginViewModel() {
         model = new LoginModel();
     }
 

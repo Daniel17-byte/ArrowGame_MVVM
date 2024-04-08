@@ -12,11 +12,11 @@ import org.danielsa.proiect_ps.viewmodel.AdminViewModel;
 import java.util.Arrays;
 
 public class AdminView extends Scene implements AdminViewInterface {
-    private final AdminViewModel presenter;
+    private final AdminViewModel viewModel;
 
     public AdminView() {
         super(new VBox(), 500, 500);
-        this.presenter = new AdminViewModel(this);
+        this.viewModel = new AdminViewModel();
         initComponents();
     }
 
@@ -39,14 +39,14 @@ public class AdminView extends Scene implements AdminViewInterface {
         gamesWonColumn.setCellValueFactory(new PropertyValueFactory<>("gamesWon"));
         userTableView.getColumns().addAll(Arrays.asList(userNameColumn, userTypeColumn, gamesWonColumn));
 
-        userTableView.getItems().addAll(presenter.getUsers());
+        userTableView.getItems().addAll(viewModel.getUsers());
 
         addButton.setOnAction(event -> {
             String username = userNameField.getText();
             String password = passwordField.getText();
             String userType = userTypeComboBox.getValue();
-            presenter.addUser(username, password, userType);
-            userTableView.getItems().addAll(presenter.getUserByUsername(username));
+            viewModel.addUser(username, password, userType);
+            userTableView.getItems().addAll(viewModel.getUserByUsername(username));
         });
 
         updateButton.setOnAction(event -> {
@@ -55,16 +55,16 @@ public class AdminView extends Scene implements AdminViewInterface {
                 String newUsername = userNameField.getText();
                 String newPassword = passwordField.getText();
                 String newUserType = userTypeComboBox.getValue();
-                presenter.updateUser(selectedUser, newUsername, newPassword, newUserType);
+                viewModel.updateUser(selectedUser, newUsername, newPassword, newUserType);
                 userTableView.getItems().clear();
-                userTableView.getItems().addAll(presenter.getUsers());
+                userTableView.getItems().addAll(viewModel.getUsers());
             }
         });
 
         deleteButton.setOnAction(event -> {
             User selectedUser = userTableView.getSelectionModel().getSelectedItem();
             if (selectedUser != null) {
-                presenter.deleteUser(selectedUser);
+                viewModel.deleteUser(selectedUser);
                 userTableView.getItems().remove(selectedUser);
             }
         });

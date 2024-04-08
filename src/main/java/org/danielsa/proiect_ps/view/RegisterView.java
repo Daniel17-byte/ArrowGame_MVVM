@@ -9,11 +9,11 @@ import javafx.scene.layout.VBox;
 import org.danielsa.proiect_ps.viewmodel.RegisterViewModel;
 
 public class RegisterView extends Scene implements RegisterViewInterface {
-    private final RegisterViewModel presenter;
+    private final RegisterViewModel viewModel;
 
     public RegisterView() {
         super(new VBox(), 300, 200);
-        this.presenter = new RegisterViewModel(this);
+        this.viewModel = new RegisterViewModel();
         initComponents();
     }
 
@@ -42,8 +42,8 @@ public class RegisterView extends Scene implements RegisterViewInterface {
             String username = usernameField.getText();
             String password = passwordField.getText();
             String userType = userTypeField.getText();
-            boolean authenticated = presenter.register(username, password, userType);
-            presenter.showRegisterResult(resultLabel, authenticated);
+            boolean authenticated = viewModel.register(username, password, userType);
+            viewModel.showRegisterResult(resultLabel, authenticated);
         });
 
         root.getChildren().addAll(usernameField, passwordField, userTypeField, registerButton);

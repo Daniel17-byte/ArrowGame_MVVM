@@ -7,11 +7,11 @@ import javafx.scene.layout.*;
 import org.danielsa.proiect_ps.viewmodel.LoginViewModel;
 
 public class LoginView extends Scene implements LoginViewInterface {
-    private final LoginViewModel presenter;
+    private final LoginViewModel viewModel;
 
     public LoginView() {
         super(new VBox(), 300, 200);
-        this.presenter = new LoginViewModel(this);
+        this.viewModel = new LoginViewModel();
         initComponents();
     }
 
@@ -40,11 +40,11 @@ public class LoginView extends Scene implements LoginViewInterface {
         loginButton.setOnAction(event -> {
             String username = usernameField.getText();
             String password = passwordField.getText();
-            boolean authenticated = presenter.authenticate(username, password);
-            presenter.showLoginResult(resultLabel, authenticated);
+            boolean authenticated = viewModel.authenticate(username, password);
+            viewModel.showLoginResult(resultLabel, authenticated);
         });
 
-        registerButton.setOnAction(event -> presenter.openRegisterWindow());
+        registerButton.setOnAction(event -> viewModel.openRegisterWindow());
 
         root.getChildren().addAll(usernameField, passwordField, loginButton, resultLabel, registerButton);
     }

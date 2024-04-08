@@ -7,16 +7,12 @@ import org.danielsa.proiect_ps.model.RegisterModel;
 import org.danielsa.proiect_ps.model.RegisterModelInterface;
 import org.danielsa.proiect_ps.view.GameView;
 import org.danielsa.proiect_ps.view.GameViewInterface;
-import org.danielsa.proiect_ps.view.RegisterViewInterface;
-import org.danielsa.proiect_ps.view.RegisterView;
 
 @Getter
 public class RegisterViewModel {
-    private final RegisterViewInterface view;
     private final RegisterModelInterface model;
 
-    public RegisterViewModel(RegisterView view) {
-        this.view = view;
+    public RegisterViewModel() {
         this.model = new RegisterModel();
     }
 
