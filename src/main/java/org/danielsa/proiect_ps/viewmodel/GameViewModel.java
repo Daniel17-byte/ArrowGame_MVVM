@@ -246,10 +246,10 @@ public class GameViewModel {
     }
 
     public void adjustInterButtons(HashMap<String, Button> buttons, boolean isVisible) {
-        buttons.get("northEastButton").setVisible(isVisible);
-        buttons.get("northWestButton").setVisible(isVisible);
-        buttons.get("southEastButton").setVisible(isVisible);
-        buttons.get("southWestButton").setVisible(isVisible);
+        buttons.get("nE").setVisible(isVisible);
+        buttons.get("nW").setVisible(isVisible);
+        buttons.get("sE").setVisible(isVisible);
+        buttons.get("sW").setVisible(isVisible);
     }
 
     public void clearBoard(BorderPane borderPane){
@@ -306,9 +306,8 @@ public class GameViewModel {
         return gridPane;
     }
 
-    public void initializeButton(Button button, String text, String photo){
-        button.setText(text);
-        button.setBackground(setBgImage(photo));
+    public void initializeButton(Button button){
+        button.setBackground(setBgImage(button.getText() + ".png"));
         button.setVisible(true);
         button.setAlignment(javafx.geometry.Pos.BOTTOM_RIGHT);
         button.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);

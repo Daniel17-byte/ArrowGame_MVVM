@@ -6,10 +6,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import lombok.Getter;
 import org.danielsa.proiect_ps.viewmodel.RegisterViewModel;
 
-@Getter
 public class RegisterView extends Scene implements RegisterViewInterface {
     private final RegisterViewModel presenter;
 

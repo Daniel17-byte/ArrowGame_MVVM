@@ -4,13 +4,10 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import lombok.Getter;
 import org.danielsa.proiect_ps.viewmodel.LoginViewModel;
 
-@Getter
 public class LoginView extends Scene implements LoginViewInterface {
     private final LoginViewModel presenter;
-
 
     public LoginView() {
         super(new VBox(), 300, 200);

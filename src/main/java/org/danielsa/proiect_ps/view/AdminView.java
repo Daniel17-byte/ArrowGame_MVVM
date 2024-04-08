@@ -6,13 +6,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import lombok.Getter;
 import org.danielsa.proiect_ps.model.User;
 import org.danielsa.proiect_ps.viewmodel.AdminViewModel;
 
 import java.util.Arrays;
 
-@Getter
 public class AdminView extends Scene implements AdminViewInterface {
     private final AdminViewModel presenter;
 
