@@ -1,23 +1,19 @@
 package org.danielsa.proiect_ps.view;
 
-import jakarta.inject.Inject;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import lombok.Getter;
-import org.danielsa.proiect_ps.DatabaseService;
 import org.danielsa.proiect_ps.viewmodel.LoginViewModel;
 
 @Getter
 public class LoginView extends Scene implements LoginViewInterface {
     private final LoginViewModel presenter;
-    @Inject
-    private final DatabaseService databaseService;
 
-    public LoginView(DatabaseService databaseService) {
+
+    public LoginView() {
         super(new VBox(), 300, 200);
-        this.databaseService = databaseService;
         this.presenter = new LoginViewModel(this);
         initComponents();
     }

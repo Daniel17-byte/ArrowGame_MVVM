@@ -1,6 +1,5 @@
 package org.danielsa.proiect_ps.view;
 
-import jakarta.inject.Inject;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -8,7 +7,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import org.danielsa.proiect_ps.DatabaseService;
 import org.danielsa.proiect_ps.model.User;
 import org.danielsa.proiect_ps.viewmodel.AdminViewModel;
 
@@ -17,12 +15,9 @@ import java.util.Arrays;
 @Getter
 public class AdminView extends Scene implements AdminViewInterface {
     private final AdminViewModel presenter;
-    @Inject
-    private final DatabaseService databaseService;
 
-    public AdminView(DatabaseService databaseService) {
+    public AdminView() {
         super(new VBox(), 500, 500);
-        this.databaseService = databaseService;
         this.presenter = new AdminViewModel(this);
         initComponents();
     }

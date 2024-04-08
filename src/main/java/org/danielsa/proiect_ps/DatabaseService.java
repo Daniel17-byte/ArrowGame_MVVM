@@ -2,10 +2,12 @@ package org.danielsa.proiect_ps;
 
 import lombok.Getter;
 import org.danielsa.proiect_ps.model.User;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 
+@Repository
 public class DatabaseService {
     private Connection connection;
 

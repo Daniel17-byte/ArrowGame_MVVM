@@ -8,7 +8,6 @@ import javafx.scene.layout.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.danielsa.proiect_ps.model.UserType;
-import org.danielsa.proiect_ps.DatabaseService;
 import org.danielsa.proiect_ps.viewmodel.GameViewModel;
 
 import java.util.HashMap;
@@ -37,12 +36,9 @@ public class GameView extends Scene implements GameViewInterface {
     private final TextArea usersPane = new TextArea();
 
     private final GameViewModel presenter;
-    @Getter
-    private final DatabaseService databaseService;
 
-    public GameView(DatabaseService databaseService) {
+    public GameView() {
         super(new VBox(), 900, 500);
-        this.databaseService = databaseService;
         presenter = new GameViewModel(this);
         initComponents();
     }
@@ -77,7 +73,7 @@ public class GameView extends Scene implements GameViewInterface {
 
     private VBox createTopPanel() {
         VBox vBox = new VBox();
-        Label greetingLabel = new Label("Hi " + getDatabaseService().getUser().getUserName().toUpperCase());
+        Label greetingLabel = new Label("Hi " + presenter.getUser().getUserName().toUpperCase());
         vBox.setStyle(("-fx-background-color: #60c760;"));
 
         vBox.getChildren().add(greetingLabel);
@@ -148,7 +144,7 @@ public class GameView extends Scene implements GameViewInterface {
 
         presenter.loadWonGames(gamesWonText, usersPane);
 
-        if (databaseService.getUser().getUserType().equals(UserType.ADMIN)) {
+        if (presenter.getUser().getUserType().equals(UserType.ADMIN)) {
             usersPane.setEditable(false);
             usersPane.setPrefSize(180, 300);
             BorderPane.setMargin(usersPane, new Insets(10, 0, 0, 10));

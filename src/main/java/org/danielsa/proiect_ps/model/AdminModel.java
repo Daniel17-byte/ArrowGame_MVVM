@@ -1,16 +1,15 @@
 package org.danielsa.proiect_ps.model;
 
-import jakarta.inject.Inject;
 import org.danielsa.proiect_ps.DatabaseService;
+import org.danielsa.proiect_ps.Main;
 
 import java.util.ArrayList;
 
 public class AdminModel implements AdminModelInterface{
-    @Inject
     private final DatabaseService databaseService;
 
-    public AdminModel(DatabaseService databaseService) {
-        this.databaseService = databaseService;
+    public AdminModel() {
+        this.databaseService = Main.context.getBean(DatabaseService.class);
     }
 
     @Override

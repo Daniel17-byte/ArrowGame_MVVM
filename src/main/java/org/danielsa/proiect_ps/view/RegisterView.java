@@ -1,6 +1,5 @@
 package org.danielsa.proiect_ps.view;
 
-import jakarta.inject.Inject;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -8,18 +7,14 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import org.danielsa.proiect_ps.DatabaseService;
 import org.danielsa.proiect_ps.viewmodel.RegisterViewModel;
 
 @Getter
 public class RegisterView extends Scene implements RegisterViewInterface {
     private final RegisterViewModel presenter;
-    @Inject
-    private final DatabaseService databaseService;
 
-    public RegisterView(DatabaseService databaseService) {
+    public RegisterView() {
         super(new VBox(), 300, 200);
-        this.databaseService = databaseService;
         this.presenter = new RegisterViewModel(this);
         initComponents();
     }

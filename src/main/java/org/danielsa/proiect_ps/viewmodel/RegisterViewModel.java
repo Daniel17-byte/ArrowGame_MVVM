@@ -17,13 +17,13 @@ public class RegisterViewModel {
 
     public RegisterViewModel(RegisterView view) {
         this.view = view;
-        this.model = new RegisterModel(view.getDatabaseService());
+        this.model = new RegisterModel();
     }
 
     @SuppressWarnings("CastCanBeRemovedNarrowingVariableType")
     public void showRegisterResult(Label resultLabel, boolean success) {
         if (success) {
-            GameViewInterface view = new GameView(model.getDatabaseService());
+            GameViewInterface view = new GameView();
             Stage gameStage = new Stage();
 
             gameStage.setScene((GameView) view);

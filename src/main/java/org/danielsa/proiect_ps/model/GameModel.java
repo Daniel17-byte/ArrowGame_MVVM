@@ -1,25 +1,23 @@
 package org.danielsa.proiect_ps.model;
 
-import jakarta.inject.Inject;
-import lombok.Getter;
 import org.danielsa.proiect_ps.DatabaseService;
+import org.danielsa.proiect_ps.Main;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
-@Getter
 public class GameModel implements GameModelInterface {
     private final ComputerPlayer computer;
     private final UserPlayer player;
     private GameBoardInterface board;
     private final Stack<Move> moveStack;
-    @Inject
     private final DatabaseService databaseService;
 
-    public GameModel(ComputerPlayer computer, UserPlayer player, GameBoardInterface board, DatabaseService databaseService) {
-        this.computer = computer;
-        this.player = player;
-        this.board = board;
-        this.databaseService = databaseService;
+    public GameModel() {
+        this.databaseService = Main.context.getBean(DatabaseService.class);
+        this.computer = new ComputerPlayer("r");
+        this.player = new UserPlayer("g");
+        this.board = new GameBoardModel(8);
         this.moveStack = new Stack<>();
     }
 
@@ -63,6 +61,11 @@ public class GameModel implements GameModelInterface {
     }
 
     @Override
+    public ComputerPlayer getComputer() {
+        return this.computer;
+    }
+
+    @Override
     public boolean isEndgame() {
         return this.board.noValidMoves() == 0;
     }
@@ -80,8 +83,17 @@ public class GameModel implements GameModelInterface {
     }
 
     @Override
-    public DatabaseService getDatabaseService() {
-        return databaseService;
+    public User getUser() {
+        return databaseService.getUser();
     }
 
+    @Override
+    public void updateUserScore() {
+        databaseService.updateUserScore();
+    }
+
+    @Override
+    public ArrayList<User> getUsers() {
+        return databaseService.getUsers();
+    }
 }

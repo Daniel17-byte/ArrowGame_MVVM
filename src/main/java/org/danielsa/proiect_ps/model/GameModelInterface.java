@@ -1,6 +1,6 @@
 package org.danielsa.proiect_ps.model;
 
-import org.danielsa.proiect_ps.DatabaseService;
+import java.util.ArrayList;
 
 public interface GameModelInterface {
     boolean makeUserMove(Move move);
@@ -12,5 +12,7 @@ public interface GameModelInterface {
     ComputerPlayer getComputer();
     boolean isEndgame();
     void clearBoard();
-    DatabaseService getDatabaseService();
+    void updateUserScore();
+    User getUser();
+    ArrayList<User> getUsers();
 }

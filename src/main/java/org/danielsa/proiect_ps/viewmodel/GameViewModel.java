@@ -34,7 +34,7 @@ public class GameViewModel {
 
     public GameViewModel(GameViewInterface view) {
         this.view = view;
-        model = new GameModel(new ComputerPlayer("r"), new UserPlayer("g"), new GameBoardModel(8), view.getDatabaseService());
+        model = new GameModel();
         model.getComputer().setStrategy(new MinMaxStrategy(4, 10));
     }
 
@@ -87,7 +87,7 @@ public class GameViewModel {
     }
 
     public void loadUserList(TextArea usersPane) {
-        ArrayList<User> users = model.getDatabaseService().getUsers();
+        ArrayList<User> users = model.getUsers();
         StringBuilder stringBuilder = new StringBuilder();
 
         users.forEach( u -> stringBuilder.append(u).append("\n"));
@@ -131,7 +131,7 @@ public class GameViewModel {
 
     @SuppressWarnings("CastCanBeRemovedNarrowingVariableType")
     public void clickedManageUsersButton() {
-        AdminViewInterface view = new AdminView(model.getDatabaseService());
+        AdminViewInterface view = new AdminView();
         Stage adminStage = new Stage();
 
         adminStage.setScene((AdminView) view);
@@ -153,7 +153,7 @@ public class GameViewModel {
         VBox dialogVbox = new VBox(20);
         dialogVbox.setAlignment(Pos.CENTER);
         if(winner.equals("User")){
-            winner = model.getDatabaseService().getUser().getUserName();
+            winner = model.getUser().getUserName();
         }
         dialogVbox.getChildren().add(new Text(winner.toUpperCase() + " wins!"));
         Scene dialogScene = new Scene(dialogVbox, 150, 100);
@@ -164,13 +164,13 @@ public class GameViewModel {
         dialog.setScene(dialogScene);
         dialog.show();
         if (!winner.equalsIgnoreCase("COMPUTER")){
-            model.getDatabaseService().updateUserScore();
+            model.updateUserScore();
         }
         loadWonGames(gamesWonText, usersPane);
     }
 
     public void loadWonGames(TextField gamesWonText, TextArea usersPane) {
-        User user = model.getDatabaseService().getUser();
+        User user = model.getUser();
         int gamesWon = user.getGamesWon();
         if (user.getUserType().equals(UserType.PLAYER)) {
             gamesWonText.setText("Games won : " + gamesWon);
@@ -324,5 +324,9 @@ public class GameViewModel {
             doButtonEffect(button);
             clickedArrowButton(e);
         });
+    }
+
+    public User getUser() {
+        return model.getUser();
     }
 }

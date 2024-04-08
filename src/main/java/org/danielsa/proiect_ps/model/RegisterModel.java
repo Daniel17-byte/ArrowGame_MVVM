@@ -1,14 +1,13 @@
 package org.danielsa.proiect_ps.model;
 
-import jakarta.inject.Inject;
 import org.danielsa.proiect_ps.DatabaseService;
+import org.danielsa.proiect_ps.Main;
 
 public class RegisterModel implements RegisterModelInterface{
-    @Inject
     private final DatabaseService databaseService;
 
-    public RegisterModel(DatabaseService authService) {
-        this.databaseService = authService;
+    public RegisterModel() {
+        this.databaseService = Main.context.getBean(DatabaseService.class);
     }
 
     @Override
@@ -16,8 +15,4 @@ public class RegisterModel implements RegisterModelInterface{
         return databaseService.register(username, password, usertype);
     }
 
-    @Override
-    public DatabaseService getDatabaseService() {
-        return databaseService;
-    }
 }

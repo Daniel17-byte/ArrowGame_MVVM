@@ -1,14 +1,13 @@
 package org.danielsa.proiect_ps.model;
 
-import jakarta.inject.Inject;
 import org.danielsa.proiect_ps.DatabaseService;
+import org.danielsa.proiect_ps.Main;
 
 public class LoginModel implements LoginModelInterface{
-    @Inject
     private final DatabaseService databaseService;
 
-    public LoginModel(DatabaseService databaseService) {
-        this.databaseService = databaseService;
+    public LoginModel() {
+        this.databaseService = Main.context.getBean(DatabaseService.class);
     }
 
     @Override
@@ -16,8 +15,4 @@ public class LoginModel implements LoginModelInterface{
         return databaseService.authenticate(username, password);
     }
 
-    @Override
-    public DatabaseService getDatabaseService() {
-        return this.databaseService;
-    }
 }

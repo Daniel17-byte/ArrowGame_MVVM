@@ -16,7 +16,7 @@ public class AdminViewModel {
 
     public AdminViewModel(AdminView view) {
         this.view = view;
-        this.model = new AdminModel(view.getDatabaseService());
+        this.model = new AdminModel();
     }
 
     public void addUser(String username, String password, String userType) {

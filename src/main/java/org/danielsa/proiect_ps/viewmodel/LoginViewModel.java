@@ -14,12 +14,12 @@ public class LoginViewModel {
 
     public LoginViewModel(LoginView view) {
         this.view = view;
-        model = new LoginModel(view.getDatabaseService());
+        model = new LoginModel();
     }
 
     @SuppressWarnings("CastCanBeRemovedNarrowingVariableType")
     public void openRegisterWindow() {
-        RegisterViewInterface view = new RegisterView(model.getDatabaseService());
+        RegisterViewInterface view = new RegisterView();
         Stage registerStage = new Stage();
 
         registerStage.setScene((RegisterView) view);
@@ -30,7 +30,7 @@ public class LoginViewModel {
     @SuppressWarnings("CastCanBeRemovedNarrowingVariableType")
     public void showLoginResult(Label resultLabel, boolean success) {
         if (success) {
-            GameViewInterface view = new GameView(model.getDatabaseService());
+            GameViewInterface view = new GameView();
             Stage gameStage = new Stage();
 
             gameStage.setScene((GameView) view);

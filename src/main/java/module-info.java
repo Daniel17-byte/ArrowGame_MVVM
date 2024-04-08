@@ -4,7 +4,9 @@ module org.danielsa.proiect_ps {
     requires javafx.web;
     requires jakarta.annotation;
     requires jakarta.inject;
-    requires org.slf4j;
+    requires jakarta.cdi;
+    requires spring.beans;
+    requires spring.context;
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
     requires net.synedra.validatorfx;
