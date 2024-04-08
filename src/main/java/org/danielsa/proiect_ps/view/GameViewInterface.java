@@ -1,6 +1,5 @@
 package org.danielsa.proiect_ps.view;
 
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.GridPane;
 
 public interface GameViewInterface {
@@ -12,5 +11,4 @@ public interface GameViewInterface {
     void setLargeBoard(GridPane smallBoard);
     GridPane getSmallBoard();
     GridPane getLargeBoard();
-    ChoiceBox<String> getLevelSelectChoiceBox();
 }

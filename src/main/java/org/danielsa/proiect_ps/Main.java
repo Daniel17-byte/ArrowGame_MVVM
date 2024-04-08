@@ -2,12 +2,10 @@ package org.danielsa.proiect_ps;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import lombok.Getter;
 import org.danielsa.proiect_ps.view.LoginViewInterface;
 import org.danielsa.proiect_ps.view.LoginView;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-@Getter
 public class Main extends Application {
     public static ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 
