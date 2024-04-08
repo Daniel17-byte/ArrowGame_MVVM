@@ -6,8 +6,11 @@ import org.danielsa.proiect_ps.view.LoginViewInterface;
 import org.danielsa.proiect_ps.view.LoginView;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.Properties;
+
 public class Main extends Application {
     public static ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    public static String path = context.getBean("myProperties", Properties.class).getProperty("path");
 
     @SuppressWarnings("CastCanBeRemovedNarrowingVariableType")
     @Override

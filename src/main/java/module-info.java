@@ -6,6 +6,7 @@ module org.danielsa.proiect_ps {
     requires jakarta.inject;
     requires jakarta.cdi;
     requires spring.beans;
+    requires spring.core;
     requires spring.context;
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
