@@ -24,7 +24,6 @@ import lombok.Setter;
 import org.danielsa.proiect_ps.Main;
 import org.danielsa.proiect_ps.model.*;
 import org.danielsa.proiect_ps.view.AdminView;
-import org.danielsa.proiect_ps.view.AdminViewInterface;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -137,12 +136,11 @@ public class GameViewModel {
                 .ifPresent(imageView -> imageView.setImage(new Image(new File(Main.path + "img.png").toURI().toString())));
     }
 
-    @SuppressWarnings("CastCanBeRemovedNarrowingVariableType")
     public void clickedManageUsersButton() {
-        AdminViewInterface view = new AdminView();
+        AdminView view = new AdminView();
         Stage adminStage = new Stage();
 
-        adminStage.setScene((AdminView) view);
+        adminStage.setScene(view);
         adminStage.setTitle("Admin Panel");
         adminStage.show();
     }
@@ -167,7 +165,7 @@ public class GameViewModel {
         Scene dialogScene = new Scene(dialogVbox, 150, 100);
         dialogVbox.setOnMouseClicked(e -> {
             dialog.close();
-            clearBoard(borderPane, levelSelectChoiceBox, gamesWonText, usersPane);
+            clearBoard(borderPane, levelSelectChoiceBox);
         });
         dialog.setScene(dialogScene);
         dialog.show();
@@ -203,8 +201,8 @@ public class GameViewModel {
                 .ifPresent(imageView -> imageView.setImage(image));
     }
 
-    public void clickedStartGame(BorderPane borderPane, HashMap<String, Button> buttons, ChoiceBox<String> levelSelectChoiceBox, TextField gamesWonText, TextArea usersPane) {
-        clearBoard(borderPane, levelSelectChoiceBox, gamesWonText, usersPane);
+    public void clickedStartGame(BorderPane borderPane, HashMap<String, Button> buttons, ChoiceBox<String> levelSelectChoiceBox) {
+        clearBoard(borderPane, levelSelectChoiceBox);
         setPlayerColor("g");
 
         String selectedBoard = levelSelectChoiceBox.getValue();
@@ -260,7 +258,7 @@ public class GameViewModel {
         buttons.get("sW").setVisible(isVisible);
     }
 
-    public void clearBoard(BorderPane borderPane, ChoiceBox<String> levelSelectChoiceBox, TextField gamesWonText, TextArea usersPane){
+    public void clearBoard(BorderPane borderPane, ChoiceBox<String> levelSelectChoiceBox){
         if(board != null){
             model.clearBoard();
             board.getChildren().stream()

@@ -2,12 +2,10 @@ package org.danielsa.proiect_ps.viewmodel;
 
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import lombok.Getter;
 import org.danielsa.proiect_ps.model.LoginModel;
 import org.danielsa.proiect_ps.model.LoginModelInterface;
 import org.danielsa.proiect_ps.view.*;
 
-@Getter
 public class LoginViewModel {
     private final LoginModelInterface model;
 
@@ -15,23 +13,21 @@ public class LoginViewModel {
         model = new LoginModel();
     }
 
-    @SuppressWarnings("CastCanBeRemovedNarrowingVariableType")
     public void openRegisterWindow() {
-        RegisterViewInterface view = new RegisterView();
+        RegisterView view = new RegisterView();
         Stage registerStage = new Stage();
 
-        registerStage.setScene((RegisterView) view);
+        registerStage.setScene(view);
         registerStage.setTitle("Register");
         registerStage.show();
     }
 
-    @SuppressWarnings("CastCanBeRemovedNarrowingVariableType")
     public void showLoginResult(Label resultLabel, boolean success) {
         if (success) {
-            GameViewInterface view = new GameView();
+            GameView view = new GameView();
             Stage gameStage = new Stage();
 
-            gameStage.setScene((GameView) view);
+            gameStage.setScene(view);
             gameStage.setTitle("Arrow Game");
             gameStage.show();
         } else {

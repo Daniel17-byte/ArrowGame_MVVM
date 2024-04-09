@@ -2,13 +2,10 @@ package org.danielsa.proiect_ps.viewmodel;
 
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import lombok.Getter;
 import org.danielsa.proiect_ps.model.RegisterModel;
 import org.danielsa.proiect_ps.model.RegisterModelInterface;
 import org.danielsa.proiect_ps.view.GameView;
-import org.danielsa.proiect_ps.view.GameViewInterface;
 
-@Getter
 public class RegisterViewModel {
     private final RegisterModelInterface model;
 
@@ -16,13 +13,12 @@ public class RegisterViewModel {
         this.model = new RegisterModel();
     }
 
-    @SuppressWarnings("CastCanBeRemovedNarrowingVariableType")
     public void showRegisterResult(Label resultLabel, boolean success) {
         if (success) {
-            GameViewInterface view = new GameView();
+            GameView view = new GameView();
             Stage gameStage = new Stage();
 
-            gameStage.setScene((GameView) view);
+            gameStage.setScene(view);
             gameStage.setTitle("Arrow Game");
             gameStage.show();
         } else {

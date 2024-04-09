@@ -8,7 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import org.danielsa.proiect_ps.viewmodel.RegisterViewModel;
 
-public class RegisterView extends Scene implements RegisterViewInterface {
+public class RegisterView extends Scene {
     private final RegisterViewModel viewModel;
 
     public RegisterView() {
@@ -17,7 +17,6 @@ public class RegisterView extends Scene implements RegisterViewInterface {
         initComponents();
     }
 
-    @Override
     public void initComponents() {
         TextField usernameField;
         PasswordField passwordField;

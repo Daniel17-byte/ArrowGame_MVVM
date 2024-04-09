@@ -11,7 +11,7 @@ import org.danielsa.proiect_ps.viewmodel.AdminViewModel;
 
 import java.util.Arrays;
 
-public class AdminView extends Scene implements AdminViewInterface {
+public class AdminView extends Scene {
     private final AdminViewModel viewModel;
 
     public AdminView() {
@@ -20,7 +20,6 @@ public class AdminView extends Scene implements AdminViewInterface {
         initComponents();
     }
 
-    @Override
     public void initComponents() {
         TextField userNameField = new TextField();
         PasswordField passwordField = new PasswordField();

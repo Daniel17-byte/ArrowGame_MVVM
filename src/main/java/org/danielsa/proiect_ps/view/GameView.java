@@ -11,7 +11,7 @@ import org.danielsa.proiect_ps.viewmodel.GameViewModel;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-public class GameView extends Scene implements GameViewInterface {
+public class GameView extends Scene {
     private final GameViewModel viewModel;
 
     public GameView() {
@@ -50,7 +50,7 @@ public class GameView extends Scene implements GameViewInterface {
         topPane = createTopPanel();
         borderPane.setTop(topPane);
 
-        leftPane = createLeftPane(buttons, levelSelectChoiceBox, borderPane, gamesWonText, usersPane);
+        leftPane = createLeftPane(buttons, levelSelectChoiceBox, borderPane);
         borderPane.setLeft(leftPane);
 
         rightPane = createRightPane(gamesWonText, usersPane);
@@ -74,7 +74,7 @@ public class GameView extends Scene implements GameViewInterface {
         return vBox;
     }
 
-    private VBox createLeftPane(HashMap<String, Button> buttons, ChoiceBox<String> levelSelectChoiceBox, BorderPane borderPane, TextField gamesWonText, TextArea usersPane) {
+    private VBox createLeftPane(HashMap<String, Button> buttons, ChoiceBox<String> levelSelectChoiceBox, BorderPane borderPane) {
         Button startGameButton = new Button("Start Game");
         Button restartButton = new Button("Restart Game");
         Button undoButton = new Button("Undo");
@@ -85,11 +85,11 @@ public class GameView extends Scene implements GameViewInterface {
         leftPane.setPrefSize(200, 500);
         leftPane.setStyle("-fx-background-color: grey;");
 
-        startGameButton.setOnAction(e -> viewModel.clickedStartGame(borderPane, buttons, levelSelectChoiceBox, gamesWonText, usersPane));
+        startGameButton.setOnAction(e -> viewModel.clickedStartGame(borderPane, buttons, levelSelectChoiceBox));
         AnchorPane.setTopAnchor(startGameButton, 113.0);
         AnchorPane.setLeftAnchor(startGameButton, 22.0);
 
-        restartButton.setOnAction(e -> viewModel.clearBoard(borderPane, levelSelectChoiceBox, gamesWonText, usersPane));
+        restartButton.setOnAction(e -> viewModel.clearBoard(borderPane, levelSelectChoiceBox));
         AnchorPane.setTopAnchor(restartButton, 230.0);
         AnchorPane.setLeftAnchor(restartButton, 22.0);
 

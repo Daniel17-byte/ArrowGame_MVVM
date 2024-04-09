@@ -6,7 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import org.danielsa.proiect_ps.viewmodel.LoginViewModel;
 
-public class LoginView extends Scene implements LoginViewInterface {
+public class LoginView extends Scene {
     private final LoginViewModel viewModel;
 
     public LoginView() {
@@ -15,7 +15,6 @@ public class LoginView extends Scene implements LoginViewInterface {
         initComponents();
     }
 
-    @Override
     public void initComponents() {
         TextField usernameField;
         PasswordField passwordField;

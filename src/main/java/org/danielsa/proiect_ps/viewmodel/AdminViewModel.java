@@ -1,13 +1,11 @@
 package org.danielsa.proiect_ps.viewmodel;
 
-import lombok.Getter;
 import org.danielsa.proiect_ps.model.AdminModel;
 import org.danielsa.proiect_ps.model.AdminModelInterface;
 import org.danielsa.proiect_ps.model.User;
 
 import java.util.ArrayList;
 
-@Getter
 public class AdminViewModel {
     private final AdminModelInterface model;
 
