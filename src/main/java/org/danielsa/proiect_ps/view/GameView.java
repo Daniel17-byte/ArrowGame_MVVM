@@ -5,27 +5,18 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import lombok.Getter;
-import lombok.Setter;
 import org.danielsa.proiect_ps.model.UserType;
 import org.danielsa.proiect_ps.viewmodel.GameViewModel;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-@Getter
-@Setter
 public class GameView extends Scene implements GameViewInterface {
-    private String selectedDirection;
-    private GridPane board;
-    private GridPane largeBoard;
-    private GridPane smallBoard;
-
-    private final GameViewModel presenter;
+    private final GameViewModel viewModel;
 
     public GameView() {
         super(new VBox(), 900, 500);
-        presenter = new GameViewModel(this);
+        viewModel = new GameViewModel();
         initComponents();
     }
 
@@ -34,10 +25,6 @@ public class GameView extends Scene implements GameViewInterface {
         VBox leftPane;
         VBox rightPane;
         VBox bottomPane;
-
-        board = new GridPane();
-        largeBoard = new GridPane();
-        smallBoard = new GridPane();
 
         HashMap<String, Button> buttons = new LinkedHashMap<>();
         TextField gamesWonText = new TextField();
@@ -54,15 +41,16 @@ public class GameView extends Scene implements GameViewInterface {
         buttons.put("w", new Button("W"));
         buttons.put("nW", new Button("NW"));
 
-        setSmallBoard(presenter.initBoard("small", gamesWonText, usersPane, borderPane, levelSelectChoiceBox));
-        setLargeBoard(presenter.initBoard("large", gamesWonText, usersPane, borderPane, levelSelectChoiceBox));
+        viewModel.setBoard(new GridPane());
+        viewModel.setSmallBoard(viewModel.initBoard("small", gamesWonText, usersPane, borderPane, levelSelectChoiceBox));
+        viewModel.setLargeBoard(viewModel.initBoard("large", gamesWonText, usersPane, borderPane, levelSelectChoiceBox));
 
         VBox root = (VBox) getRoot();
 
         topPane = createTopPanel();
         borderPane.setTop(topPane);
 
-        leftPane = createLeftPane(buttons, levelSelectChoiceBox, borderPane);
+        leftPane = createLeftPane(buttons, levelSelectChoiceBox, borderPane, gamesWonText, usersPane);
         borderPane.setLeft(leftPane);
 
         rightPane = createRightPane(gamesWonText, usersPane);
@@ -78,7 +66,7 @@ public class GameView extends Scene implements GameViewInterface {
 
     private VBox createTopPanel() {
         VBox vBox = new VBox();
-        Label greetingLabel = new Label("Hi " + presenter.getUser().getUserName().toUpperCase());
+        Label greetingLabel = new Label("Hi " + viewModel.getUser().getUserName().toUpperCase());
         vBox.setStyle(("-fx-background-color: #60c760;"));
 
         vBox.getChildren().add(greetingLabel);
@@ -86,7 +74,7 @@ public class GameView extends Scene implements GameViewInterface {
         return vBox;
     }
 
-    private VBox createLeftPane(HashMap<String, Button> buttons, ChoiceBox<String> levelSelectChoiceBox, BorderPane borderPane) {
+    private VBox createLeftPane(HashMap<String, Button> buttons, ChoiceBox<String> levelSelectChoiceBox, BorderPane borderPane, TextField gamesWonText, TextArea usersPane) {
         Button startGameButton = new Button("Start Game");
         Button restartButton = new Button("Restart Game");
         Button undoButton = new Button("Undo");
@@ -97,11 +85,11 @@ public class GameView extends Scene implements GameViewInterface {
         leftPane.setPrefSize(200, 500);
         leftPane.setStyle("-fx-background-color: grey;");
 
-        startGameButton.setOnAction(e -> presenter.clickedStartGame(borderPane, buttons, levelSelectChoiceBox));
+        startGameButton.setOnAction(e -> viewModel.clickedStartGame(borderPane, buttons, levelSelectChoiceBox, gamesWonText, usersPane));
         AnchorPane.setTopAnchor(startGameButton, 113.0);
         AnchorPane.setLeftAnchor(startGameButton, 22.0);
 
-        restartButton.setOnAction(e -> presenter.clearBoard(borderPane, levelSelectChoiceBox));
+        restartButton.setOnAction(e -> viewModel.clearBoard(borderPane, levelSelectChoiceBox, gamesWonText, usersPane));
         AnchorPane.setTopAnchor(restartButton, 230.0);
         AnchorPane.setLeftAnchor(restartButton, 22.0);
 
@@ -114,7 +102,7 @@ public class GameView extends Scene implements GameViewInterface {
         AnchorPane.setTopAnchor(boardLabel, 153.0);
         AnchorPane.setLeftAnchor(boardLabel, 22.0);
 
-        undoButton.setOnAction(e -> presenter.clickedUndoButton());
+        undoButton.setOnAction(e -> viewModel.clickedUndoButton());
         AnchorPane.setTopAnchor(undoButton, 191.0);
         AnchorPane.setLeftAnchor(undoButton, 22.0);
 
@@ -141,16 +129,16 @@ public class GameView extends Scene implements GameViewInterface {
         BorderPane.setMargin(gamesWonText, new Insets(20, 0, 0, 10));
         rightPane.setTop(gamesWonText);
 
-        presenter.loadWonGames(gamesWonText, usersPane);
+        viewModel.loadWonGames(gamesWonText, usersPane);
 
-        if (presenter.getUser().getUserType().equals(UserType.ADMIN)) {
+        if (viewModel.getUser().getUserType().equals(UserType.ADMIN)) {
             usersPane.setEditable(false);
             usersPane.setPrefSize(180, 300);
             BorderPane.setMargin(usersPane, new Insets(10, 0, 0, 10));
             rightPane.setCenter(usersPane);
-            presenter.loadUserList(usersPane);
+            viewModel.loadUserList(usersPane);
 
-            manageUsersButton.setOnAction(event -> presenter.clickedManageUsersButton());
+            manageUsersButton.setOnAction(event -> viewModel.clickedManageUsersButton());
             rightPane.setBottom(manageUsersButton);
             BorderPane.setMargin(manageUsersButton, new Insets(10, 0, 0, 10));
         }
@@ -169,7 +157,7 @@ public class GameView extends Scene implements GameViewInterface {
         buttonRow.setSpacing(2);
 
         buttons.forEach((key, value) -> {
-            presenter.initializeButton(value);
+            viewModel.initializeButton(value);
             buttonRow.getChildren().add(value);
         });
 
@@ -193,9 +181,9 @@ public class GameView extends Scene implements GameViewInterface {
         centerPane.setPrefSize(500, 500);
         centerPanel.getChildren().add(centerPane);
 
-        getBoard().setVisible(true);
-        setBoard(largeBoard);
-        borderPane.setCenter(getBoard());
+        viewModel.getBoard().setVisible(true);
+        viewModel.setBoard(viewModel.getLargeBoard());
+        borderPane.setCenter(viewModel.getBoard());
         borderPane.getCenter().setStyle("-fx-background-color: #9db98a;");
         borderPane.setVisible(true);
     }

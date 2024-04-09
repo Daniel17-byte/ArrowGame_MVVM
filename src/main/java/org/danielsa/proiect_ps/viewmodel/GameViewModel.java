@@ -19,41 +19,47 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import lombok.Getter;
+import lombok.Setter;
 import org.danielsa.proiect_ps.Main;
 import org.danielsa.proiect_ps.model.*;
 import org.danielsa.proiect_ps.view.AdminView;
 import org.danielsa.proiect_ps.view.AdminViewInterface;
-import org.danielsa.proiect_ps.view.GameViewInterface;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+@Getter
+@Setter
 public class GameViewModel {
-    private final GameViewInterface view;
     private final GameModelInterface model;
+    private GridPane board;
+    private GridPane largeBoard;
+    private GridPane smallBoard;
+    private String selectedDirection;
 
-    public GameViewModel(GameViewInterface view) {
-        this.view = view;
+
+    public GameViewModel() {
         model = new GameModel();
         model.getComputer().setStrategy(new MinMaxStrategy(4, 10));
     }
 
     public void userRegisterMove(TextField gamesWonText, TextArea usersPane, int row, int column, BorderPane borderPane, ChoiceBox<String> levelSelectChoiceBox) {
-        boolean valid = model.makeUserMove(new Move(row, column, new Arrow(model.getUserPlayer().getColor(), view.getSelectedDirection())));
+        boolean valid = model.makeUserMove(new Move(row, column, new Arrow(model.getUserPlayer().getColor(), selectedDirection)));
 
         if(!valid) {
             signalInvalidMove("Invalid Move.");
             return;
         }
 
-        if(view.getSelectedDirection() == null){
+        if(selectedDirection == null){
             signalInvalidMove("Direction not selected.");
             return;
         }
 
-        placeArrow(model.getUserPlayer().getColor(), view.getSelectedDirection(), row, column);
+        placeArrow(model.getUserPlayer().getColor(), selectedDirection, row, column);
 
         if(model.isEndgame()) {
             signalEndgame(gamesWonText, usersPane, "User", borderPane, levelSelectChoiceBox);
@@ -84,8 +90,8 @@ public class GameViewModel {
     public void undoMove() {
         Move sysMove = model.undo();
         Move usrMove = model.undo();
-        if(null != sysMove) removeArrow(sysMove.getX(), sysMove.getY());
-        if(null != usrMove) removeArrow(usrMove.getX(), usrMove.getY());
+        if(sysMove != null) removeArrow(sysMove.getX(), sysMove.getY());
+        if(usrMove != null) removeArrow(usrMove.getX(), usrMove.getY());
     }
 
     public void loadUserList(TextArea usersPane) {
@@ -119,7 +125,7 @@ public class GameViewModel {
     }
 
     public void removeArrow(int row, int column) {
-        view.getBoard().getChildren().stream()
+        board.getChildren().stream()
                 .filter(node -> node instanceof ImageView)
                 .map(node -> (ImageView) node)
                 .filter(imageView -> {
@@ -161,7 +167,7 @@ public class GameViewModel {
         Scene dialogScene = new Scene(dialogVbox, 150, 100);
         dialogVbox.setOnMouseClicked(e -> {
             dialog.close();
-            clearBoard(borderPane, levelSelectChoiceBox);
+            clearBoard(borderPane, levelSelectChoiceBox, gamesWonText, usersPane);
         });
         dialog.setScene(dialogScene);
         dialog.show();
@@ -183,10 +189,9 @@ public class GameViewModel {
     }
 
     public void placeArrow(String color, String direction, int row, int column) {
-        Image image = new Image(new File("/Users/daniellungu/Desktop/PROIECT_PS/src/main/resources/images/" + color + direction + ".png").toURI().toString());
         Image image = new Image(new File(Main.path + color + direction + ".png").toURI().toString());
 
-        view.getBoard().getChildren().stream()
+        board.getChildren().stream()
                 .filter(node -> node instanceof ImageView)
                 .map(node -> (ImageView) node)
                 .filter(imageView -> {
@@ -198,23 +203,23 @@ public class GameViewModel {
                 .ifPresent(imageView -> imageView.setImage(image));
     }
 
-    public void clickedStartGame(BorderPane borderPane, HashMap<String, Button> buttons, ChoiceBox<String> levelSelectChoiceBox) {
-        clearBoard(borderPane, levelSelectChoiceBox);
+    public void clickedStartGame(BorderPane borderPane, HashMap<String, Button> buttons, ChoiceBox<String> levelSelectChoiceBox, TextField gamesWonText, TextArea usersPane) {
+        clearBoard(borderPane, levelSelectChoiceBox, gamesWonText, usersPane);
         setPlayerColor("g");
 
         String selectedBoard = levelSelectChoiceBox.getValue();
         if(selectedBoard.equals("4x4")) {
-            view.getBoard().setVisible(true);
+            board.setVisible(true);
             borderPane.setVisible(true);
-            view.setBoard(view.getSmallBoard());
-            borderPane.setCenter(view.getBoard());
+            board = smallBoard;
+            borderPane.setCenter(board);
             changeLevel(4);
             adjustInterButtons(buttons, false);
         } else {
-            view.getBoard().setVisible(true);
+            board.setVisible(true);
             borderPane.setVisible(true);
-            view.setBoard(view.getLargeBoard());
-            borderPane.setCenter(view.getBoard());
+            board = largeBoard;
+            borderPane.setCenter(board);
             changeLevel(8);
             adjustInterButtons(buttons, true);
         }
@@ -233,7 +238,7 @@ public class GameViewModel {
 
     public void clickedArrowButton(@NotNull ActionEvent mouseEvent) {
         Button button = (Button)mouseEvent.getSource();
-        view.setSelectedDirection(button.getText());
+        selectedDirection = button.getText();
     }
 
     public void doButtonEffect(Button button) {
@@ -255,20 +260,20 @@ public class GameViewModel {
         buttons.get("sW").setVisible(isVisible);
     }
 
-    public void clearBoard(BorderPane borderPane, ChoiceBox<String> levelSelectChoiceBox){
-        if(view.getBoard() != null){
+    public void clearBoard(BorderPane borderPane, ChoiceBox<String> levelSelectChoiceBox, TextField gamesWonText, TextArea usersPane){
+        if(board != null){
             model.clearBoard();
-            view.getBoard().getChildren().stream()
+            board.getChildren().stream()
                     .filter(node -> node instanceof ImageView)
                     .map(node -> (ImageView) node)
                     .forEach(imageView -> imageView.setImage(new Image(new File(Main.path + "img.png").toURI().toString())));
         }
         if(levelSelectChoiceBox.getValue().equals("4x4")){
-            view.setBoard(view.getSmallBoard());
-            borderPane.setCenter(view.getBoard());
+            board = smallBoard;
+            borderPane.setCenter(board);
         }else {
-            view.setBoard(view.getLargeBoard());
-            borderPane.setCenter(view.getBoard());
+            board = largeBoard;
+            borderPane.setCenter(board);
         }
         borderPane.getCenter().setStyle("-fx-background-color: #9db98a;");
     }
@@ -297,7 +302,7 @@ public class GameViewModel {
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                ImageView imageView = new ImageView(new File("/Users/daniellungu/Desktop/PROIECT_PS/src/main/resources/images/img.png").toURI().toString());
+                ImageView imageView = new ImageView(new File(Main.path + "img.png").toURI().toString());
                 imageView.setOnMouseClicked( e -> clickedBoard(e, gamesWonText, usersPane, borderPane, levelSelectChoiceBox));
                 imageView.setFitWidth(41.0);
                 imageView.setFitHeight(38.0);
