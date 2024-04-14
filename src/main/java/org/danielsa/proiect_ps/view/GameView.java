@@ -28,6 +28,7 @@ public class GameView extends Scene {
     private void initComponents() {
         VBox topPane;
         VBox leftPane;
+        VBox centerPane;
         VBox rightPane;
         VBox bottomPane;
 
@@ -64,7 +65,8 @@ public class GameView extends Scene {
         rightPane = createRightPane(gamesWonText, usersPane);
         borderPane.setRight(rightPane);
 
-        createCenterPane(borderPane);
+        centerPane = createCenterPane();
+        borderPane.setCenter(centerPane);
 
         bottomPane = createBottomPane(buttons);
         borderPane.setBottom(bottomPane);
@@ -187,17 +189,18 @@ public class GameView extends Scene {
         return bottomPanel;
     }
 
-    private void createCenterPane(BorderPane borderPane) {
+    private VBox createCenterPane() {
         VBox centerPanel = new VBox();
-        AnchorPane centerPane = new AnchorPane();
+        BorderPane centerPane = new BorderPane();
         centerPane.setPrefSize(500, 500);
-        centerPanel.getChildren().add(centerPane);
-
         viewModel.getBoard().setVisible(true);
         viewModel.setBoard(viewModel.getLargeBoard());
-        borderPane.setCenter(viewModel.getBoard());
-        borderPane.getCenter().setStyle("-fx-background-color: #9db98a;");
-        borderPane.setVisible(true);
+        centerPane.setCenter(viewModel.getBoard());
+        centerPane.getCenter().setStyle("-fx-background-color: #9db98a;");
+        centerPane.setVisible(true);
+        centerPanel.getChildren().add(centerPane);
+
+        return centerPanel;
     }
 
     public void initializeButton(Button button){
