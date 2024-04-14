@@ -197,21 +197,17 @@ public class GameViewModel {
                 .ifPresent(imageView -> imageView.setImage(image));
     }
 
-    public void clickedStartGame(BorderPane borderPane, HashMap<String, Button> buttons, ChoiceBox<String> levelSelectChoiceBox) {
+    public void clickedStartGame(HashMap<String, Button> buttons, ChoiceBox<String> levelSelectChoiceBox) {
         clearBoard(levelSelectChoiceBox);
         setPlayerColor("g");
 
         String selectedBoard = levelSelectChoiceBox.getValue();
         if(selectedBoard.equals("4x4")) {
-            board.setVisible(true);
             board = smallBoard;
-            borderPane.setCenter(board);
             changeLevel(4);
             adjustInterButtons(buttons, false);
         } else {
-            board.setVisible(true);
             board = largeBoard;
-            borderPane.setCenter(board);
             changeLevel(8);
             adjustInterButtons(buttons, true);
         }

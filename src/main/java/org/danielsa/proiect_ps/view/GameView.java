@@ -99,7 +99,10 @@ public class GameView extends Scene {
         leftPane.setPrefSize(200, 500);
         leftPane.setStyle("-fx-background-color: grey;");
 
-        startGameButton.setOnAction(e -> viewModel.clickedStartGame(borderPane, buttons, levelSelectChoiceBox));
+        startGameButton.setOnAction(e -> {
+            viewModel.clickedStartGame(buttons, levelSelectChoiceBox);
+            borderPane.setCenter(viewModel.getBoard());
+        });
         AnchorPane.setTopAnchor(startGameButton, 113.0);
         AnchorPane.setLeftAnchor(startGameButton, 22.0);
 
