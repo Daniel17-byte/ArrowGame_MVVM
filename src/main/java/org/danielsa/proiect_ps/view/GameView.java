@@ -51,8 +51,8 @@ public class GameView extends Scene {
         buttons.put("nW", new Button("NW"));
 
         viewModel.setBoard(new GridPane());
-        viewModel.setSmallBoard(viewModel.initBoard("small", levelSelectChoiceBox));
-        viewModel.setLargeBoard(viewModel.initBoard("large", levelSelectChoiceBox));
+        viewModel.setSmallBoard(viewModel.initBoard("small"));
+        viewModel.setLargeBoard(viewModel.initBoard("large"));
 
         VBox root = (VBox) getRoot();
 
@@ -74,6 +74,7 @@ public class GameView extends Scene {
         Bindings.bindBidirectional(gamesWonText.textProperty(), viewModel.getGameswonProperty());
         Bindings.bindBidirectional(selectedDirection.textProperty(), viewModel.getSelectedDirection());
         Bindings.bindBidirectional(usersPane.textProperty(), viewModel.getUsersPaneProperty());
+        Bindings.bindBidirectional(levelSelectChoiceBox.valueProperty(), viewModel.getLevelSelectChoiceBox());
 
         root.getChildren().add(borderPane);
     }
@@ -100,18 +101,18 @@ public class GameView extends Scene {
         leftPane.setStyle("-fx-background-color: grey;");
 
         startGameButton.setOnAction(e -> {
-            viewModel.clickedStartGame(buttons, levelSelectChoiceBox);
+            viewModel.clickedStartGame(buttons);
             borderPane.setCenter(viewModel.getBoard());
         });
         AnchorPane.setTopAnchor(startGameButton, 113.0);
         AnchorPane.setLeftAnchor(startGameButton, 22.0);
 
-        restartButton.setOnAction(e -> viewModel.clearBoard(levelSelectChoiceBox));
+        restartButton.setOnAction(e -> viewModel.clearBoard());
         AnchorPane.setTopAnchor(restartButton, 230.0);
         AnchorPane.setLeftAnchor(restartButton, 22.0);
 
         levelSelectChoiceBox.getItems().addAll("4x4", "8x8");
-        levelSelectChoiceBox.setValue("8x8");
+
         AnchorPane.setTopAnchor(levelSelectChoiceBox, 151.0);
         AnchorPane.setLeftAnchor(levelSelectChoiceBox, 68.0);
 

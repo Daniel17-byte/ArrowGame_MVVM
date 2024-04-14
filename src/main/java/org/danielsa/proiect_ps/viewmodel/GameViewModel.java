@@ -8,7 +8,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -22,7 +21,6 @@ import lombok.Setter;
 import org.danielsa.proiect_ps.Main;
 import org.danielsa.proiect_ps.model.*;
 import org.danielsa.proiect_ps.view.AdminView;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -41,13 +39,15 @@ public class GameViewModel {
     private final StringProperty gameswonProperty = new SimpleStringProperty();
     @Getter
     private final StringProperty usersPaneProperty = new SimpleStringProperty();
+    @Getter
+    private final StringProperty levelSelectChoiceBox = new SimpleStringProperty("8x8");
 
     public GameViewModel() {
         model = new GameModel();
         model.getComputer().setStrategy(new MinMaxStrategy(4, 10));
     }
 
-    public void userRegisterMove(int row, int column, ChoiceBox<String> levelSelectChoiceBox) {
+    public void userRegisterMove(int row, int column) {
         boolean valid = model.makeUserMove(new Move(row, column, new Arrow(model.getUserPlayer().getColor(), selectedDirection.getValue())));
 
         if(!valid) {
@@ -63,7 +63,7 @@ public class GameViewModel {
         placeArrow(model.getUserPlayer().getColor(), selectedDirection.getValue(), row, column);
 
         if(model.isEndgame()) {
-            signalEndgame("User", levelSelectChoiceBox);
+            signalEndgame("User");
             return;
         }
 
@@ -73,7 +73,7 @@ public class GameViewModel {
         }
 
         if(model.isEndgame()){
-            signalEndgame("Computer", levelSelectChoiceBox);
+            signalEndgame("Computer");
         }
     }
 
@@ -146,7 +146,7 @@ public class GameViewModel {
         undoMove();
     }
 
-    public void signalEndgame(String winner, ChoiceBox<String> levelSelectChoiceBox) {
+    public void signalEndgame(String winner) {
         final Stage dialog = new Stage();
         dialog.setTitle("Game end.");
         dialog.setX(950);
@@ -162,7 +162,7 @@ public class GameViewModel {
         Scene dialogScene = new Scene(dialogVbox, 150, 100);
         dialogVbox.setOnMouseClicked(e -> {
             dialog.close();
-            clearBoard(levelSelectChoiceBox);
+            clearBoard();
         });
         dialog.setScene(dialogScene);
         dialog.show();
@@ -197,8 +197,8 @@ public class GameViewModel {
                 .ifPresent(imageView -> imageView.setImage(image));
     }
 
-    public void clickedStartGame(HashMap<String, Button> buttons, ChoiceBox<String> levelSelectChoiceBox) {
-        clearBoard(levelSelectChoiceBox);
+    public void clickedStartGame(HashMap<String, Button> buttons) {
+        clearBoard();
         setPlayerColor("g");
 
         String selectedBoard = levelSelectChoiceBox.getValue();
@@ -213,7 +213,7 @@ public class GameViewModel {
         }
     }
 
-    public void clickedBoard(MouseEvent mouseEvent, ChoiceBox<String> levelSelectChoiceBox) {
+    public void clickedBoard(MouseEvent mouseEvent) {
         EventTarget source = mouseEvent.getTarget();
         if(!(source instanceof ImageView)){
             return;
@@ -221,10 +221,10 @@ public class GameViewModel {
         ImageView selectedImage = (ImageView)source;
         int row = GridPane.getRowIndex(selectedImage);
         int col = GridPane.getColumnIndex(selectedImage);
-        userRegisterMove(row, col, levelSelectChoiceBox);
+        userRegisterMove(row, col);
     }
 
-    public void clickedArrowButton(@NotNull ActionEvent mouseEvent) {
+    public void clickedArrowButton(ActionEvent mouseEvent) {
         Button button = (Button)mouseEvent.getSource();
         selectedDirection.setValue(button.getText());
     }
@@ -248,7 +248,7 @@ public class GameViewModel {
         buttons.get("sW").setVisible(isVisible);
     }
 
-    public void clearBoard(ChoiceBox<String> levelSelectChoiceBox){
+    public void clearBoard(){
         if(board != null){
             model.clearBoard();
             board.getChildren().stream()
@@ -263,7 +263,7 @@ public class GameViewModel {
         }
     }
 
-    public GridPane initBoard(String sizeS, ChoiceBox<String> levelSelectChoiceBox) {
+    public GridPane initBoard(String sizeS) {
         GridPane gridPane = new GridPane();
         gridPane.setPrefSize(500, 500);
 
@@ -288,7 +288,7 @@ public class GameViewModel {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 ImageView imageView = new ImageView(new File(Main.path + "img.png").toURI().toString());
-                imageView.setOnMouseClicked( e -> clickedBoard(e, levelSelectChoiceBox));
+                imageView.setOnMouseClicked(this::clickedBoard);
                 imageView.setFitWidth(41.0);
                 imageView.setFitHeight(38.0);
                 GridPane.setMargin(imageView, new Insets(2));
