@@ -1,5 +1,6 @@
 package org.danielsa.proiect_ps.view;
 
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -40,31 +41,25 @@ public class AdminView extends Scene {
 
         userTableView.getItems().addAll(viewModel.getUsers());
 
+        userTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> viewModel.getSelectedUserProperty().set(newVal));
+
         addButton.setOnAction(event -> {
-            String username = userNameField.getText();
-            String password = passwordField.getText();
-            String userType = userTypeComboBox.getValue();
-            viewModel.addUser(username, password, userType);
-            userTableView.getItems().addAll(viewModel.getUserByUsername(username));
+            viewModel.addUser();
+            userTableView.getItems().addAll(viewModel.getUserByUsername());
         });
 
         updateButton.setOnAction(event -> {
-            User selectedUser = userTableView.getSelectionModel().getSelectedItem();
-            if (selectedUser != null) {
-                String newUsername = userNameField.getText();
-                String newPassword = passwordField.getText();
-                String newUserType = userTypeComboBox.getValue();
-                viewModel.updateUser(selectedUser, newUsername, newPassword, newUserType);
+            if (userTableView.getSelectionModel().getSelectedItem() != null) {
+                viewModel.updateUser();
                 userTableView.getItems().clear();
                 userTableView.getItems().addAll(viewModel.getUsers());
             }
         });
 
         deleteButton.setOnAction(event -> {
-            User selectedUser = userTableView.getSelectionModel().getSelectedItem();
-            if (selectedUser != null) {
-                viewModel.deleteUser(selectedUser);
-                userTableView.getItems().remove(selectedUser);
+            if (userTableView.getSelectionModel().getSelectedItem() != null) {
+                viewModel.deleteUser();
+                userTableView.getItems().remove(userTableView.getSelectionModel().getSelectedItem());
             }
         });
 
@@ -78,6 +73,11 @@ public class AdminView extends Scene {
                 new HBox(addButton, updateButton, deleteButton),
                 userTableView
         );
+
+        Bindings.bindBidirectional(userNameField.textProperty(), viewModel.getUsernameProperty());
+        Bindings.bindBidirectional(passwordField.textProperty(), viewModel.getPasswordProperty());
+        Bindings.bindBidirectional(userTypeComboBox.valueProperty(), viewModel.getUserTypeProperty());
+
         setRoot(root);
     }
 

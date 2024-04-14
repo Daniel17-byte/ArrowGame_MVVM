@@ -1,5 +1,11 @@
 package org.danielsa.proiect_ps.viewmodel;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import lombok.Getter;
+import lombok.Setter;
 import org.danielsa.proiect_ps.model.AdminModel;
 import org.danielsa.proiect_ps.model.AdminModelInterface;
 import org.danielsa.proiect_ps.model.User;
@@ -8,27 +14,35 @@ import java.util.ArrayList;
 
 public class AdminViewModel {
     private final AdminModelInterface model;
+    @Getter
+    private final StringProperty usernameProperty = new SimpleStringProperty();
+    @Getter
+    private final StringProperty passwordProperty = new SimpleStringProperty();
+    @Getter
+    private final ObjectProperty<String> userTypeProperty = new SimpleObjectProperty<>();
+    @Getter @Setter
+    private ObjectProperty<User> selectedUserProperty = new SimpleObjectProperty<>();
 
     public AdminViewModel() {
         this.model = new AdminModel();
     }
 
-    public void addUser(String username, String password, String userType) {
-        boolean success = model.register(username, password, userType);
+    public void addUser() {
+        boolean success = model.register(usernameProperty.getValue(), passwordProperty.getValue(), userTypeProperty.getValue());
         if (!success) {
             System.out.println("User not added!");
         }
     }
 
-    public void updateUser(User selectedUser, String newUsername, String newPassword, String newUserType) {
-        User updatedUser = model.updateUser(selectedUser.getUserName(), newUsername, newPassword, newUserType);
+    public void updateUser() {
+        User updatedUser = model.updateUser(selectedUserProperty.getValue().getUserName(), usernameProperty.getValue(), passwordProperty.getValue(), userTypeProperty.getValue());
         if (updatedUser == null) {
             System.out.println("User not updated!");
         }
     }
 
-    public void deleteUser(User selectedUser) {
-        boolean success = model.deleteUser(selectedUser.getUserName());
+    public void deleteUser() {
+        boolean success = model.deleteUser(selectedUserProperty.getValue().getUserName());
         if (!success) {
             System.out.println("User not deleted!");
         }
@@ -45,8 +59,8 @@ public class AdminViewModel {
         return users;
     }
 
-    public User getUserByUsername(String username) {
-        User user = model.getUserByUsername(username);
+    public User getUserByUsername() {
+        User user = model.getUserByUsername(usernameProperty.getValue());
 
         if (user == null) {
             System.out.println("User not found");
