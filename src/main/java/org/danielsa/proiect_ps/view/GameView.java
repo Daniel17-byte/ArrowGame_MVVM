@@ -50,8 +50,8 @@ public class GameView extends Scene {
         buttons.put("nW", new Button("NW"));
 
         viewModel.setBoard(new GridPane());
-        viewModel.setSmallBoard(viewModel.initBoard("small", borderPane, levelSelectChoiceBox));
-        viewModel.setLargeBoard(viewModel.initBoard("large", borderPane, levelSelectChoiceBox));
+        viewModel.setSmallBoard(viewModel.initBoard("small", levelSelectChoiceBox));
+        viewModel.setLargeBoard(viewModel.initBoard("large", levelSelectChoiceBox));
 
         VBox root = (VBox) getRoot();
 

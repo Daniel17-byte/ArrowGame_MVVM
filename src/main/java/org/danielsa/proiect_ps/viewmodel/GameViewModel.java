@@ -217,7 +217,7 @@ public class GameViewModel {
         }
     }
 
-    public void clickedBoard(MouseEvent mouseEvent, BorderPane borderPane, ChoiceBox<String> levelSelectChoiceBox) {
+    public void clickedBoard(MouseEvent mouseEvent, ChoiceBox<String> levelSelectChoiceBox) {
         EventTarget source = mouseEvent.getTarget();
         if(!(source instanceof ImageView)){
             return;
@@ -267,7 +267,7 @@ public class GameViewModel {
         }
     }
 
-    public GridPane initBoard(String sizeS, BorderPane borderPane, ChoiceBox<String> levelSelectChoiceBox) {
+    public GridPane initBoard(String sizeS, ChoiceBox<String> levelSelectChoiceBox) {
         GridPane gridPane = new GridPane();
         gridPane.setPrefSize(500, 500);
 
@@ -292,7 +292,7 @@ public class GameViewModel {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 ImageView imageView = new ImageView(new File(Main.path + "img.png").toURI().toString());
-                imageView.setOnMouseClicked( e -> clickedBoard(e, borderPane, levelSelectChoiceBox));
+                imageView.setOnMouseClicked( e -> clickedBoard(e, levelSelectChoiceBox));
                 imageView.setFitWidth(41.0);
                 imageView.setFitHeight(38.0);
                 GridPane.setMargin(imageView, new Insets(2));
