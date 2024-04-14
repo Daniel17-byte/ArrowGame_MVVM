@@ -1,6 +1,5 @@
 package org.danielsa.proiect_ps.viewmodel;
 
-import javafx.animation.ScaleTransition;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventTarget;
@@ -15,7 +14,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
 import org.danielsa.proiect_ps.Main;
@@ -26,21 +24,24 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-@Getter
-@Setter
 public class GameViewModel {
     private final GameModelInterface model;
-    private GridPane board;
-    private GridPane largeBoard;
-    private GridPane smallBoard;
     @Getter
-    private final StringProperty selectedDirection = new SimpleStringProperty();
+    private final StringProperty selectedDirectionProperty = new SimpleStringProperty();
     @Getter
     private final StringProperty gameswonProperty = new SimpleStringProperty();
     @Getter
     private final StringProperty usersPaneProperty = new SimpleStringProperty();
     @Getter
-    private final StringProperty levelSelectChoiceBox = new SimpleStringProperty("8x8");
+    private final StringProperty levelSelectChoiceBoxProperty = new SimpleStringProperty("8x8");
+    @Getter @Setter
+    private ObjectProperty<GridPane> boardProperty = new SimpleObjectProperty<>();
+    @Getter @Setter
+    private ObjectProperty<GridPane> gridLargeBoardProperty = new SimpleObjectProperty<>();
+    @Getter @Setter
+    private ObjectProperty<GridPane> gridSmallBoardProperty = new SimpleObjectProperty<>();
+    @Getter @Setter
+    private ObjectProperty<HashMap<String, Button>> buttonsProperty = new SimpleObjectProperty<>();
 
     public GameViewModel() {
         model = new GameModel();
@@ -48,19 +49,19 @@ public class GameViewModel {
     }
 
     public void userRegisterMove(int row, int column) {
-        boolean valid = model.makeUserMove(new Move(row, column, new Arrow(model.getUserPlayer().getColor(), selectedDirection.getValue())));
+        boolean valid = model.makeUserMove(new Move(row, column, new Arrow(model.getUserPlayer().getColor(), selectedDirectionProperty.getValue())));
 
         if(!valid) {
             signalInvalidMove("Invalid Move.");
             return;
         }
 
-        if(selectedDirection.getValue() == null){
+        if(selectedDirectionProperty.getValue() == null){
             signalInvalidMove("Direction not selected.");
             return;
         }
 
-        placeArrow(model.getUserPlayer().getColor(), selectedDirection.getValue(), row, column);
+        placeArrow(model.getUserPlayer().getColor(), selectedDirectionProperty.getValue(), row, column);
 
         if(model.isEndgame()) {
             signalEndgame("User");
@@ -121,7 +122,7 @@ public class GameViewModel {
     }
 
     public void removeArrow(int row, int column) {
-        board.getChildren().stream()
+        getBoardProperty().getValue().getChildren().stream()
                 .filter(node -> node instanceof ImageView)
                 .map(node -> (ImageView) node)
                 .filter(imageView -> {
@@ -185,7 +186,7 @@ public class GameViewModel {
     public void placeArrow(String color, String direction, int row, int column) {
         Image image = new Image(new File(Main.path + color + direction + ".png").toURI().toString());
 
-        board.getChildren().stream()
+        getBoardProperty().getValue().getChildren().stream()
                 .filter(node -> node instanceof ImageView)
                 .map(node -> (ImageView) node)
                 .filter(imageView -> {
@@ -197,19 +198,19 @@ public class GameViewModel {
                 .ifPresent(imageView -> imageView.setImage(image));
     }
 
-    public void clickedStartGame(HashMap<String, Button> buttons) {
+    public void clickedStartGame() {
         clearBoard();
         setPlayerColor("g");
 
-        String selectedBoard = levelSelectChoiceBox.getValue();
+        String selectedBoard = levelSelectChoiceBoxProperty.getValue();
         if(selectedBoard.equals("4x4")) {
-            board = smallBoard;
+            getBoardProperty().setValue(gridSmallBoardProperty.getValue());
             changeLevel(4);
-            adjustInterButtons(buttons, false);
+            adjustInterButtons(false);
         } else {
-            board = largeBoard;
+            getBoardProperty().setValue(gridLargeBoardProperty.getValue());
             changeLevel(8);
-            adjustInterButtons(buttons, true);
+            adjustInterButtons(true);
         }
     }
 
@@ -226,40 +227,28 @@ public class GameViewModel {
 
     public void clickedArrowButton(ActionEvent mouseEvent) {
         Button button = (Button)mouseEvent.getSource();
-        selectedDirection.setValue(button.getText());
+        selectedDirectionProperty.setValue(button.getText());
     }
 
-    public void doButtonEffect(Button button) {
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.2), button);
-        scaleTransition.setFromX(1);
-        scaleTransition.setFromY(1);
-        scaleTransition.setToX(0.8);
-        scaleTransition.setToY(0.8);
-        scaleTransition.setAutoReverse(true);
-        scaleTransition.setCycleCount(2);
-
-        scaleTransition.play();
-    }
-
-    public void adjustInterButtons(HashMap<String, Button> buttons, boolean isVisible) {
-        buttons.get("nE").setVisible(isVisible);
-        buttons.get("nW").setVisible(isVisible);
-        buttons.get("sE").setVisible(isVisible);
-        buttons.get("sW").setVisible(isVisible);
+    public void adjustInterButtons(boolean isVisible) {
+        buttonsProperty.getValue().get("nE").setVisible(isVisible);
+        buttonsProperty.getValue().get("nW").setVisible(isVisible);
+        buttonsProperty.getValue().get("sE").setVisible(isVisible);
+        buttonsProperty.getValue().get("sW").setVisible(isVisible);
     }
 
     public void clearBoard(){
-        if(board != null){
+        if(getBoardProperty().getValue() != null){
             model.clearBoard();
-            board.getChildren().stream()
+            getBoardProperty().getValue().getChildren().stream()
                     .filter(node -> node instanceof ImageView)
                     .map(node -> (ImageView) node)
                     .forEach(imageView -> imageView.setImage(new Image(new File(Main.path + "img.png").toURI().toString())));
         }
-        if(levelSelectChoiceBox.getValue().equals("4x4")){
-            board = smallBoard;
+        if(levelSelectChoiceBoxProperty.getValue().equals("4x4")){
+            getBoardProperty().setValue(gridSmallBoardProperty.getValue());
         }else {
-            board = largeBoard;
+            getBoardProperty().setValue(gridLargeBoardProperty.getValue());
         }
     }
 

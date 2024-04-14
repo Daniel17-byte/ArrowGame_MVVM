@@ -1,5 +1,6 @@
 package org.danielsa.proiect_ps.view;
 
+import javafx.animation.ScaleTransition;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 import org.danielsa.proiect_ps.Main;
 import org.danielsa.proiect_ps.model.UserType;
 import org.danielsa.proiect_ps.viewmodel.GameViewModel;
@@ -50,16 +52,16 @@ public class GameView extends Scene {
         buttons.put("w", new Button("W"));
         buttons.put("nW", new Button("NW"));
 
-        viewModel.setBoard(new GridPane());
-        viewModel.setSmallBoard(viewModel.initBoard("small"));
-        viewModel.setLargeBoard(viewModel.initBoard("large"));
+        viewModel.getBoardProperty().setValue(new GridPane());
+        viewModel.getGridSmallBoardProperty().setValue(viewModel.initBoard("small"));
+        viewModel.getGridLargeBoardProperty().setValue(viewModel.initBoard("large"));
 
         VBox root = (VBox) getRoot();
 
         topPane = createTopPanel();
         borderPane.setTop(topPane);
 
-        leftPane = createLeftPane(buttons, levelSelectChoiceBox, borderPane);
+        leftPane = createLeftPane(levelSelectChoiceBox, borderPane);
         borderPane.setLeft(leftPane);
 
         rightPane = createRightPane(gamesWonText, usersPane);
@@ -72,9 +74,9 @@ public class GameView extends Scene {
         borderPane.setBottom(bottomPane);
 
         Bindings.bindBidirectional(gamesWonText.textProperty(), viewModel.getGameswonProperty());
-        Bindings.bindBidirectional(selectedDirection.textProperty(), viewModel.getSelectedDirection());
+        Bindings.bindBidirectional(selectedDirection.textProperty(), viewModel.getSelectedDirectionProperty());
         Bindings.bindBidirectional(usersPane.textProperty(), viewModel.getUsersPaneProperty());
-        Bindings.bindBidirectional(levelSelectChoiceBox.valueProperty(), viewModel.getLevelSelectChoiceBox());
+        Bindings.bindBidirectional(levelSelectChoiceBox.valueProperty(), viewModel.getLevelSelectChoiceBoxProperty());
 
         root.getChildren().add(borderPane);
     }
@@ -89,7 +91,7 @@ public class GameView extends Scene {
         return vBox;
     }
 
-    private VBox createLeftPane(HashMap<String, Button> buttons, ChoiceBox<String> levelSelectChoiceBox, BorderPane borderPane) {
+    private VBox createLeftPane(ChoiceBox<String> levelSelectChoiceBox, BorderPane borderPane) {
         Button startGameButton = new Button("Start Game");
         Button restartButton = new Button("Restart Game");
         Button undoButton = new Button("Undo");
@@ -101,8 +103,8 @@ public class GameView extends Scene {
         leftPane.setStyle("-fx-background-color: grey;");
 
         startGameButton.setOnAction(e -> {
-            viewModel.clickedStartGame(buttons);
-            borderPane.setCenter(viewModel.getBoard());
+            viewModel.clickedStartGame();
+            borderPane.setCenter(viewModel.getBoardProperty().getValue());
         });
         AnchorPane.setTopAnchor(startGameButton, 113.0);
         AnchorPane.setLeftAnchor(startGameButton, 22.0);
@@ -179,6 +181,8 @@ public class GameView extends Scene {
             buttonRow.getChildren().add(value);
         });
 
+        viewModel.getButtonsProperty().setValue(buttons);
+
         AnchorPane bottomPane = new AnchorPane();
         bottomPane.setStyle("-fx-background-color: grey;");
         bottomPane.getChildren().add(buttonRow);
@@ -197,9 +201,9 @@ public class GameView extends Scene {
         VBox centerPanel = new VBox();
         BorderPane centerPane = new BorderPane();
         centerPane.setPrefSize(500, 500);
-        viewModel.getBoard().setVisible(true);
-        viewModel.setBoard(viewModel.getLargeBoard());
-        centerPane.setCenter(viewModel.getBoard());
+        viewModel.getBoardProperty().getValue().setVisible(true);
+        viewModel.getBoardProperty().setValue(viewModel.getGridLargeBoardProperty().getValue());
+        centerPane.setCenter(viewModel.getBoardProperty().getValue());
         centerPane.getCenter().setStyle("-fx-background-color: #9db98a;");
         centerPane.setVisible(true);
         centerPanel.getChildren().add(centerPane);
@@ -221,7 +225,7 @@ public class GameView extends Scene {
         button.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, null)));
 
         button.setOnAction( e ->{
-            viewModel.doButtonEffect(button);
+            doButtonEffect(button);
             viewModel.clickedArrowButton(e);
         });
     }
@@ -229,5 +233,17 @@ public class GameView extends Scene {
     public Background setBgImage(String name){
         BackgroundImage b = new BackgroundImage(new Image(new File(Main.path + "g" + name).toURI().toString()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         return new Background(b);
+    }
+
+    public void doButtonEffect(Button button) {
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.2), button);
+        scaleTransition.setFromX(1);
+        scaleTransition.setFromY(1);
+        scaleTransition.setToX(0.8);
+        scaleTransition.setToY(0.8);
+        scaleTransition.setAutoReverse(true);
+        scaleTransition.setCycleCount(2);
+
+        scaleTransition.play();
     }
 }
