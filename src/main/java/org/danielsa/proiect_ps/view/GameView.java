@@ -1,5 +1,6 @@
 package org.danielsa.proiect_ps.view;
 
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -28,8 +29,9 @@ public class GameView extends Scene {
 
         HashMap<String, Button> buttons = new LinkedHashMap<>();
         TextField gamesWonText = new TextField();
+        TextField selectedDirection = new TextField();
         ChoiceBox<String> levelSelectChoiceBox  = new ChoiceBox<>();
-        TextArea usersPane = new TextArea();
+        TextArea usersPane = new TextArea("");
         BorderPane borderPane = new BorderPane();
 
         buttons.put("n", new Button("N"));
@@ -42,8 +44,8 @@ public class GameView extends Scene {
         buttons.put("nW", new Button("NW"));
 
         viewModel.setBoard(new GridPane());
-        viewModel.setSmallBoard(viewModel.initBoard("small", gamesWonText, usersPane, borderPane, levelSelectChoiceBox));
-        viewModel.setLargeBoard(viewModel.initBoard("large", gamesWonText, usersPane, borderPane, levelSelectChoiceBox));
+        viewModel.setSmallBoard(viewModel.initBoard("small", borderPane, levelSelectChoiceBox));
+        viewModel.setLargeBoard(viewModel.initBoard("large", borderPane, levelSelectChoiceBox));
 
         VBox root = (VBox) getRoot();
 
@@ -60,6 +62,10 @@ public class GameView extends Scene {
 
         bottomPane = createBottomPane(buttons);
         borderPane.setBottom(bottomPane);
+
+        Bindings.bindBidirectional(gamesWonText.textProperty(), viewModel.getGameswonProperty());
+        Bindings.bindBidirectional(selectedDirection.textProperty(), viewModel.getSelectedDirection());
+        Bindings.bindBidirectional(usersPane.textProperty(), viewModel.getUsersPaneProperty());
 
         root.getChildren().add(borderPane);
     }
@@ -129,14 +135,14 @@ public class GameView extends Scene {
         BorderPane.setMargin(gamesWonText, new Insets(20, 0, 0, 10));
         rightPane.setTop(gamesWonText);
 
-        viewModel.loadWonGames(gamesWonText, usersPane);
+        viewModel.loadWonGames();
 
         if (viewModel.getUser().getUserType().equals(UserType.ADMIN)) {
             usersPane.setEditable(false);
             usersPane.setPrefSize(180, 300);
             BorderPane.setMargin(usersPane, new Insets(10, 0, 0, 10));
             rightPane.setCenter(usersPane);
-            viewModel.loadUserList(usersPane);
+            viewModel.loadUserList();
 
             manageUsersButton.setOnAction(event -> viewModel.clickedManageUsersButton());
             rightPane.setBottom(manageUsersButton);

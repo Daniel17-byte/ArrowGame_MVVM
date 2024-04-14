@@ -1,6 +1,7 @@
 package org.danielsa.proiect_ps.viewmodel;
 
 import javafx.animation.ScaleTransition;
+import javafx.beans.property.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventTarget;
 import javafx.geometry.Insets;
@@ -8,8 +9,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -37,31 +36,35 @@ public class GameViewModel {
     private GridPane board;
     private GridPane largeBoard;
     private GridPane smallBoard;
-    private String selectedDirection;
-
+    @Getter
+    private final StringProperty selectedDirection = new SimpleStringProperty();
+    @Getter
+    private final StringProperty gameswonProperty = new SimpleStringProperty();
+    @Getter
+    private final StringProperty usersPaneProperty = new SimpleStringProperty();
 
     public GameViewModel() {
         model = new GameModel();
         model.getComputer().setStrategy(new MinMaxStrategy(4, 10));
     }
 
-    public void userRegisterMove(TextField gamesWonText, TextArea usersPane, int row, int column, BorderPane borderPane, ChoiceBox<String> levelSelectChoiceBox) {
-        boolean valid = model.makeUserMove(new Move(row, column, new Arrow(model.getUserPlayer().getColor(), selectedDirection)));
+    public void userRegisterMove(int row, int column, BorderPane borderPane, ChoiceBox<String> levelSelectChoiceBox) {
+        boolean valid = model.makeUserMove(new Move(row, column, new Arrow(model.getUserPlayer().getColor(), selectedDirection.getValue())));
 
         if(!valid) {
             signalInvalidMove("Invalid Move.");
             return;
         }
 
-        if(selectedDirection == null){
+        if(selectedDirection.getValue() == null){
             signalInvalidMove("Direction not selected.");
             return;
         }
 
-        placeArrow(model.getUserPlayer().getColor(), selectedDirection, row, column);
+        placeArrow(model.getUserPlayer().getColor(), selectedDirection.getValue(), row, column);
 
         if(model.isEndgame()) {
-            signalEndgame(gamesWonText, usersPane, "User", borderPane, levelSelectChoiceBox);
+            signalEndgame("User", borderPane, levelSelectChoiceBox);
             return;
         }
 
@@ -71,7 +74,7 @@ public class GameViewModel {
         }
 
         if(model.isEndgame()){
-            signalEndgame(gamesWonText, usersPane, "Computer", borderPane, levelSelectChoiceBox);
+            signalEndgame("Computer", borderPane, levelSelectChoiceBox);
         }
     }
 
@@ -93,13 +96,13 @@ public class GameViewModel {
         if(usrMove != null) removeArrow(usrMove.getX(), usrMove.getY());
     }
 
-    public void loadUserList(TextArea usersPane) {
+    public void loadUserList() {
         ArrayList<User> users = model.getUsers();
         StringBuilder stringBuilder = new StringBuilder();
 
         users.forEach( u -> stringBuilder.append(u).append("\n"));
 
-        usersPane.setText(stringBuilder.toString());
+        usersPaneProperty.setValue(stringBuilder.toString());
     }
 
     public Background setBgImage(String name){
@@ -149,7 +152,7 @@ public class GameViewModel {
         undoMove();
     }
 
-    public void signalEndgame(TextField gamesWonText, TextArea usersPane, String winner, BorderPane borderPane, ChoiceBox<String> levelSelectChoiceBox) {
+    public void signalEndgame(String winner, BorderPane borderPane, ChoiceBox<String> levelSelectChoiceBox) {
         final Stage dialog = new Stage();
         dialog.setTitle("Game end.");
         dialog.setX(950);
@@ -172,17 +175,16 @@ public class GameViewModel {
         if (!winner.equalsIgnoreCase("COMPUTER")){
             model.updateUserScore();
         }
-        loadWonGames(gamesWonText, usersPane);
+        loadWonGames();
     }
 
-    public void loadWonGames(TextField gamesWonText, TextArea usersPane) {
+    public void loadWonGames() {
         User user = model.getUser();
         int gamesWon = user.getGamesWon();
         if (user.getUserType().equals(UserType.PLAYER)) {
-            gamesWonText.setText("Games won : " + gamesWon);
-            usersPane.setVisible(false);
+            gameswonProperty.setValue("Games won : " + gamesWon);
         }else {
-            gamesWonText.setText("Games won : " + gamesWon);
+            gameswonProperty.setValue("Games won : " + gamesWon);
         }
     }
 
@@ -223,7 +225,7 @@ public class GameViewModel {
         }
     }
 
-    public void clickedBoard(MouseEvent mouseEvent, TextField gamesWonText, TextArea usersPane, BorderPane borderPane, ChoiceBox<String> levelSelectChoiceBox) {
+    public void clickedBoard(MouseEvent mouseEvent, BorderPane borderPane, ChoiceBox<String> levelSelectChoiceBox) {
         EventTarget source = mouseEvent.getTarget();
         if(!(source instanceof ImageView)){
             return;
@@ -231,12 +233,12 @@ public class GameViewModel {
         ImageView selectedImage = (ImageView)source;
         int row = GridPane.getRowIndex(selectedImage);
         int col = GridPane.getColumnIndex(selectedImage);
-        userRegisterMove(gamesWonText, usersPane, row, col, borderPane, levelSelectChoiceBox);
+        userRegisterMove(row, col, borderPane, levelSelectChoiceBox);
     }
 
     public void clickedArrowButton(@NotNull ActionEvent mouseEvent) {
         Button button = (Button)mouseEvent.getSource();
-        selectedDirection = button.getText();
+        selectedDirection.setValue(button.getText());
     }
 
     public void doButtonEffect(Button button) {
@@ -276,7 +278,7 @@ public class GameViewModel {
         borderPane.getCenter().setStyle("-fx-background-color: #9db98a;");
     }
 
-    public GridPane initBoard(String sizeS, TextField gamesWonText, TextArea usersPane, BorderPane borderPane, ChoiceBox<String> levelSelectChoiceBox) {
+    public GridPane initBoard(String sizeS, BorderPane borderPane, ChoiceBox<String> levelSelectChoiceBox) {
         GridPane gridPane = new GridPane();
         gridPane.setPrefSize(500, 500);
 
@@ -301,7 +303,7 @@ public class GameViewModel {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 ImageView imageView = new ImageView(new File(Main.path + "img.png").toURI().toString());
-                imageView.setOnMouseClicked( e -> clickedBoard(e, gamesWonText, usersPane, borderPane, levelSelectChoiceBox));
+                imageView.setOnMouseClicked( e -> clickedBoard(e, borderPane, levelSelectChoiceBox));
                 imageView.setFitWidth(41.0);
                 imageView.setFitHeight(38.0);
                 GridPane.setMargin(imageView, new Insets(2));
