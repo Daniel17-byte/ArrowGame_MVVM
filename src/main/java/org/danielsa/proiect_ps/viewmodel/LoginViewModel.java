@@ -1,13 +1,21 @@
 package org.danielsa.proiect_ps.viewmodel;
 
-import javafx.scene.control.Label;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.stage.Stage;
+import lombok.Getter;
 import org.danielsa.proiect_ps.model.LoginModel;
 import org.danielsa.proiect_ps.model.LoginModelInterface;
 import org.danielsa.proiect_ps.view.*;
 
 public class LoginViewModel {
     private final LoginModelInterface model;
+    @Getter
+    private final StringProperty resultLabelProperty = new SimpleStringProperty();
+    @Getter
+    private final StringProperty usernameProperty = new SimpleStringProperty();
+    @Getter
+    private final StringProperty passwordProperty = new SimpleStringProperty();
 
     public LoginViewModel() {
         model = new LoginModel();
@@ -22,7 +30,8 @@ public class LoginViewModel {
         registerStage.show();
     }
 
-    public void showLoginResult(Label resultLabel, boolean success) {
+    public void showLoginResult() {
+        boolean success = model.authenticate(usernameProperty.getValue(), passwordProperty.getValue());
         if (success) {
             GameView view = new GameView();
             Stage gameStage = new Stage();
@@ -31,11 +40,8 @@ public class LoginViewModel {
             gameStage.setTitle("Arrow Game");
             gameStage.show();
         } else {
-            resultLabel.setText("Login failed. Please try again.");
+            resultLabelProperty.setValue("Login failed. Please try again.");
         }
     }
 
-    public boolean authenticate(String username, String password) {
-        return model.authenticate(username, password);
-    }
 }

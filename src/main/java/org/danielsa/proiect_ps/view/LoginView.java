@@ -1,5 +1,6 @@
 package org.danielsa.proiect_ps.view;
 
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -36,14 +37,13 @@ public class LoginView extends Scene {
 
         registerButton = new Button("Register");
 
-        loginButton.setOnAction(event -> {
-            String username = usernameField.getText();
-            String password = passwordField.getText();
-            boolean authenticated = viewModel.authenticate(username, password);
-            viewModel.showLoginResult(resultLabel, authenticated);
-        });
+        loginButton.setOnAction(event -> viewModel.showLoginResult());
 
         registerButton.setOnAction(event -> viewModel.openRegisterWindow());
+
+        Bindings.bindBidirectional(resultLabel.textProperty(), viewModel.getResultLabelProperty());
+        Bindings.bindBidirectional(usernameField.textProperty(), viewModel.getUsernameProperty());
+        Bindings.bindBidirectional(passwordField.textProperty(), viewModel.getPasswordProperty());
 
         root.getChildren().addAll(usernameField, passwordField, loginButton, resultLabel, registerButton);
     }
