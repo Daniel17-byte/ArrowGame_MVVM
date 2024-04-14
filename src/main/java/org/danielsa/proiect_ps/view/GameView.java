@@ -5,10 +5,14 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import org.danielsa.proiect_ps.Main;
 import org.danielsa.proiect_ps.model.UserType;
 import org.danielsa.proiect_ps.viewmodel.GameViewModel;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -33,6 +37,8 @@ public class GameView extends Scene {
         ChoiceBox<String> levelSelectChoiceBox  = new ChoiceBox<>();
         TextArea usersPane = new TextArea("");
         BorderPane borderPane = new BorderPane();
+        borderPane.setStyle("-fx-background-color: #9db98a;");
+        borderPane.setVisible(true);
 
         buttons.put("n", new Button("N"));
         buttons.put("nE", new Button("NE"));
@@ -95,7 +101,7 @@ public class GameView extends Scene {
         AnchorPane.setTopAnchor(startGameButton, 113.0);
         AnchorPane.setLeftAnchor(startGameButton, 22.0);
 
-        restartButton.setOnAction(e -> viewModel.clearBoard(borderPane, levelSelectChoiceBox));
+        restartButton.setOnAction(e -> viewModel.clearBoard(levelSelectChoiceBox));
         AnchorPane.setTopAnchor(restartButton, 230.0);
         AnchorPane.setLeftAnchor(restartButton, 22.0);
 
@@ -163,7 +169,7 @@ public class GameView extends Scene {
         buttonRow.setSpacing(2);
 
         buttons.forEach((key, value) -> {
-            viewModel.initializeButton(value);
+            initializeButton(value);
             buttonRow.getChildren().add(value);
         });
 
@@ -194,4 +200,27 @@ public class GameView extends Scene {
         borderPane.setVisible(true);
     }
 
+    public void initializeButton(Button button){
+        button.setBackground(setBgImage(button.getText() + ".png"));
+        button.setVisible(true);
+        button.setAlignment(javafx.geometry.Pos.BOTTOM_RIGHT);
+        button.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
+        button.setLayoutX(113.0);
+        button.setLayoutY(13.0);
+        button.setMnemonicParsing(false);
+        button.setPrefHeight(50.0);
+        button.setPrefWidth(50.0);
+        button.setPrefWidth(50.0);
+        button.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, null)));
+
+        button.setOnAction( e ->{
+            viewModel.doButtonEffect(button);
+            viewModel.clickedArrowButton(e);
+        });
+    }
+
+    public Background setBgImage(String name){
+        BackgroundImage b = new BackgroundImage(new Image(new File(Main.path + "g" + name).toURI().toString()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        return new Background(b);
+    }
 }
