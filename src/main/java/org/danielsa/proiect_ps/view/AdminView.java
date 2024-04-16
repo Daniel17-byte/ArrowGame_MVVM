@@ -7,7 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import org.danielsa.proiect_ps.model.User;
+import org.danielsa.proiect_ps.model.UserModel;
 import org.danielsa.proiect_ps.viewmodel.AdminViewModel;
 
 import java.util.Arrays;
@@ -29,13 +29,13 @@ public class AdminView extends Scene {
         Button addButton = new Button("Add");
         Button updateButton = new Button("Update");
         Button deleteButton = new Button("Delete");
-        TableView<User> userTableView = new TableView<>();
+        TableView<UserModel> userTableView = new TableView<>();
 
-        TableColumn<User, String> userNameColumn = new TableColumn<>("Username");
+        TableColumn<UserModel, String> userNameColumn = new TableColumn<>("Username");
         userNameColumn.setCellValueFactory(new PropertyValueFactory<>("userName"));
-        TableColumn<User, String> userTypeColumn = new TableColumn<>("User Type");
+        TableColumn<UserModel, String> userTypeColumn = new TableColumn<>("User Type");
         userTypeColumn.setCellValueFactory(new PropertyValueFactory<>("userType"));
-        TableColumn<User, Integer> gamesWonColumn = new TableColumn<>("Games Won");
+        TableColumn<UserModel, Integer> gamesWonColumn = new TableColumn<>("Games Won");
         gamesWonColumn.setCellValueFactory(new PropertyValueFactory<>("gamesWon"));
         userTableView.getColumns().addAll(Arrays.asList(userNameColumn, userTypeColumn, gamesWonColumn));
 

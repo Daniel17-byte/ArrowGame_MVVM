@@ -8,7 +8,7 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class UserModel {
     private String id;
     @Getter
     private String userName;
@@ -16,7 +16,7 @@ public class User {
     private UserType userType;
     private int gamesWon;
 
-    public User(String userName, String usertype, int gamesWon) {
+    public UserModel(String userName, String usertype, int gamesWon) {
         this.userName = userName;
         if (usertype.equals("ADMIN")){
             this.userType = UserType.ADMIN;
@@ -35,7 +35,7 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
+        UserModel user = (UserModel) o;
         return gamesWon == user.gamesWon && Objects.equals(id, user.id) && Objects.equals(userName, user.userName) && Objects.equals(password, user.password) && userType == user.userType;
     }
 

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 public class UserPlayer {
     private String color;
-    private User user;
+    private UserModel user;
     public UserPlayer(String color) {
         this.color = color;
     }

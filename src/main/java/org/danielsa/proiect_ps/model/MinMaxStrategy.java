@@ -16,7 +16,7 @@ public class MinMaxStrategy {
         return board.noValidMoves();
     }
 
-    public Move makeMove(GameBoardInterface board) {
+    public MoveModel makeMove(GameBoardInterface board) {
         return board.getValidMoves().stream()
                 .limit(maxMoves)
                 .map(move -> {
@@ -57,9 +57,9 @@ public class MinMaxStrategy {
                 .orElse(0);
     }
 
-    private ArrayList<Move> getNElements(ArrayList<Move> source, int n) {
+    private ArrayList<MoveModel> getNElements(ArrayList<MoveModel> source, int n) {
         Random rand = new Random();
-        ArrayList<Move> destination = new ArrayList<>(n);
+        ArrayList<MoveModel> destination = new ArrayList<>(n);
         ArrayList<Integer> indices = new ArrayList<>(source.size());
 
         for (int i = 0; i < source.size(); i++) {

@@ -79,7 +79,7 @@ public class GameViewModel {
         commandClearBoard.execute();
     }
 
-    public User getUser() {
+    public UserModel getUser() {
         return commandGetUser.execute();
     }
 

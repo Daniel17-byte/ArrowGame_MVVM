@@ -13,12 +13,12 @@ public class AdminModel implements AdminModelInterface{
     }
 
     @Override
-    public ArrayList<User> getUsers() {
+    public ArrayList<UserModel> getUsers() {
         return databaseService.getUsers();
     }
 
     @Override
-    public User updateUser(String username, String newUsername, String newPassword, String newUserType) {
+    public UserModel updateUser(String username, String newUsername, String newPassword, String newUserType) {
         return databaseService.updateUser(username, newUsername, newPassword, newUserType);
     }
 
@@ -28,7 +28,7 @@ public class AdminModel implements AdminModelInterface{
     }
 
     @Override
-    public User getUserByUsername(String username) {
+    public UserModel getUserByUsername(String username) {
         return databaseService.getUserByUsername(username);
     }
 

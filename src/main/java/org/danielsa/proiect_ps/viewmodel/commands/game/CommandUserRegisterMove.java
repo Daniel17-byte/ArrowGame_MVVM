@@ -10,8 +10,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.danielsa.proiect_ps.Main;
-import org.danielsa.proiect_ps.model.Arrow;
-import org.danielsa.proiect_ps.model.Move;
+import org.danielsa.proiect_ps.model.ArrowModel;
+import org.danielsa.proiect_ps.model.MoveModel;
 import org.danielsa.proiect_ps.viewmodel.GameViewModel;
 
 import java.io.File;
@@ -24,7 +24,7 @@ public class CommandUserRegisterMove {
     }
 
     public void execute(int row, int column) {
-        boolean valid = viewModel.getModel().makeUserMove(new Move(row, column, new Arrow(viewModel.getModel().getUserPlayer().getColor(), viewModel.getSelectedDirectionProperty().getValue())));
+        boolean valid = viewModel.getModel().makeUserMove(new MoveModel(row, column, new ArrowModel(viewModel.getModel().getUserPlayer().getColor(), viewModel.getSelectedDirectionProperty().getValue())));
 
         if(!valid) {
             signalInvalidMove("Invalid Move.");
@@ -43,9 +43,9 @@ public class CommandUserRegisterMove {
             return;
         }
 
-        Move move = viewModel.getModel().getSystemMove();
-        if (move != null){
-            placeArrow(viewModel.getModel().getComputer().getColor(), move.getArrow().getDirection(), move.getX(), move.getY());
+        MoveModel moveModel = viewModel.getModel().getSystemMove();
+        if (moveModel != null){
+            placeArrow(viewModel.getModel().getComputer().getColor(), moveModel.getArrowModel().getDirection(), moveModel.getX(), moveModel.getY());
         }
 
         if(viewModel.getModel().isEndgame()){

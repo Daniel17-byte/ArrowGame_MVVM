@@ -1,7 +1,7 @@
 package org.danielsa.proiect_ps.viewmodel.commands.admin;
 
 import eu.hansolo.tilesfx.Command;
-import org.danielsa.proiect_ps.model.User;
+import org.danielsa.proiect_ps.model.UserModel;
 import org.danielsa.proiect_ps.viewmodel.AdminViewModel;
 
 public class CommandUpdateUser implements Command {
@@ -13,7 +13,7 @@ public class CommandUpdateUser implements Command {
 
     @Override
     public void execute() {
-        User updatedUser = viewModel.getModel().updateUser(viewModel.getSelectedUserProperty().getValue().getUserName(), viewModel.getUsernameProperty().getValue(), viewModel.getPasswordProperty().getValue(), viewModel.getUserTypeProperty().getValue());
+        UserModel updatedUser = viewModel.getModel().updateUser(viewModel.getSelectedUserProperty().getValue().getUserName(), viewModel.getUsernameProperty().getValue(), viewModel.getPasswordProperty().getValue(), viewModel.getUserTypeProperty().getValue());
 
         if (updatedUser == null) {
             System.out.println("User not updated!");

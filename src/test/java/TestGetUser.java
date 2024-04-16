@@ -1,5 +1,5 @@
-import org.danielsa.proiect_ps.model.User;
 import org.danielsa.proiect_ps.DatabaseService;
+import org.danielsa.proiect_ps.model.UserModel;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -20,8 +20,8 @@ public class TestGetUser {
         assertTrue(databaseService.register(username, password, userType));
         assertTrue(databaseService.authenticate(username, password));
 
-        ArrayList<User> users = databaseService.getUsers();
-        HashMap<String, User> map = new HashMap<>();
+        ArrayList<UserModel> users = databaseService.getUsers();
+        HashMap<String, UserModel> map = new HashMap<>();
         users.forEach( u -> map.put(u.getUserName(), u));
 
         assertTrue(map.containsKey(username));

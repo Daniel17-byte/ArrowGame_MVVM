@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import org.danielsa.proiect_ps.Main;
-import org.danielsa.proiect_ps.model.Move;
+import org.danielsa.proiect_ps.model.MoveModel;
 import org.danielsa.proiect_ps.viewmodel.GameViewModel;
 
 import java.io.File;
@@ -19,10 +19,10 @@ public class CommandUndoMove implements Command {
 
     @Override
     public void execute() {
-        Move sysMove = viewModel.getModel().undo();
-        Move usrMove = viewModel.getModel().undo();
-        if(sysMove != null) removeArrow(sysMove.getX(), sysMove.getY());
-        if(usrMove != null) removeArrow(usrMove.getX(), usrMove.getY());
+        MoveModel sysMoveModel = viewModel.getModel().undo();
+        MoveModel usrMoveModel = viewModel.getModel().undo();
+        if(sysMoveModel != null) removeArrow(sysMoveModel.getX(), sysMoveModel.getY());
+        if(usrMoveModel != null) removeArrow(usrMoveModel.getX(), usrMoveModel.getY());
     }
 
     private void removeArrow(int row, int column) {

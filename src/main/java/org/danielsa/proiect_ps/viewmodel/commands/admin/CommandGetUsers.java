@@ -1,6 +1,6 @@
 package org.danielsa.proiect_ps.viewmodel.commands.admin;
 
-import org.danielsa.proiect_ps.model.User;
+import org.danielsa.proiect_ps.model.UserModel;
 import org.danielsa.proiect_ps.viewmodel.AdminViewModel;
 
 import java.util.ArrayList;
@@ -12,8 +12,8 @@ public class CommandGetUsers {
         this.viewModel = viewModel;
     }
 
-    public ArrayList<User> execute() {
-        ArrayList<User> users = viewModel.getModel().getUsers();
+    public ArrayList<UserModel> execute() {
+        ArrayList<UserModel> users = viewModel.getModel().getUsers();
 
         if (users.isEmpty()){
             System.out.println("Couldn't load users!");

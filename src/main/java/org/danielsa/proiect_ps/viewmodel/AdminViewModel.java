@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.danielsa.proiect_ps.model.AdminModel;
 import org.danielsa.proiect_ps.model.AdminModelInterface;
-import org.danielsa.proiect_ps.model.User;
+import org.danielsa.proiect_ps.model.UserModel;
 import org.danielsa.proiect_ps.viewmodel.commands.admin.CommandAddUser;
 import org.danielsa.proiect_ps.viewmodel.commands.admin.CommandDeleteUser;
 import org.danielsa.proiect_ps.viewmodel.commands.admin.CommandGetUsers;
@@ -24,9 +24,9 @@ public class AdminViewModel {
     private final StringProperty passwordProperty = new SimpleStringProperty();
     private final ObjectProperty<String> userTypeProperty = new SimpleObjectProperty<>();
     @Setter
-    private ObjectProperty<User> selectedUserProperty = new SimpleObjectProperty<>();
+    private ObjectProperty<UserModel> selectedUserProperty = new SimpleObjectProperty<>();
     @Setter
-    private ObjectProperty<TableView<User>> userTableViewProperty = new SimpleObjectProperty<>();
+    private ObjectProperty<TableView<UserModel>> userTableViewProperty = new SimpleObjectProperty<>();
     private final CommandAddUser commandAddUser;
     private final CommandUpdateUser commandUpdateUser;
     private final CommandDeleteUser commandDeleteUser;
@@ -52,7 +52,7 @@ public class AdminViewModel {
         commandDeleteUser.execute();
     }
 
-    public ArrayList<User> getUsers(){
+    public ArrayList<UserModel> getUsers(){
         return commandGetUsers.execute();
     }
 }

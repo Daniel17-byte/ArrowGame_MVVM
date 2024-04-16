@@ -4,16 +4,16 @@ import lombok.*;
 
 @Getter
 @EqualsAndHashCode
-public class Arrow {
+public class ArrowModel {
     @Setter
     private String color;
     private final String direction;
 
-    public Arrow(String color, String direction) {
+    public ArrowModel(String color, String direction) {
         this.color = color;
         this.direction = direction;
     }
-    public Arrow(String direction) {
+    public ArrowModel(String direction) {
         this.direction = direction;
     }
 

@@ -3,15 +3,15 @@ package org.danielsa.proiect_ps.model;
 import lombok.Getter;
 
 @Getter
-public class Move {
+public class MoveModel {
     private final int x;
     private final int y;
-    private final Arrow arrow;
+    private final ArrowModel arrowModel;
 
-    public Move(int x, int y, Arrow arrow) {
+    public MoveModel(int x, int y, ArrowModel arrowModel) {
         this.x = x;
         this.y = y;
-        this.arrow = arrow;
+        this.arrowModel = arrowModel;
     }
 
 }

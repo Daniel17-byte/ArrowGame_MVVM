@@ -2,7 +2,7 @@ package org.danielsa.proiect_ps.viewmodel.commands.admin;
 
 import eu.hansolo.tilesfx.Command;
 import javafx.scene.control.TableView;
-import org.danielsa.proiect_ps.model.User;
+import org.danielsa.proiect_ps.model.UserModel;
 import org.danielsa.proiect_ps.viewmodel.AdminViewModel;
 
 public class CommandAddUser implements Command {
@@ -20,7 +20,7 @@ public class CommandAddUser implements Command {
         );
 
         if (success) {
-            TableView<User> tableView = viewModel.getUserTableViewProperty().getValue();
+            TableView<UserModel> tableView = viewModel.getUserTableViewProperty().getValue();
             tableView.getItems().addAll(viewModel.getModel().getUserByUsername(viewModel.getUsernameProperty().getValue()));
         } else {
             System.out.println("User not added!");

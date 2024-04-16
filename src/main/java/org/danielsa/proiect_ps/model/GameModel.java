@@ -10,7 +10,7 @@ public class GameModel implements GameModelInterface {
     private final ComputerPlayer computer;
     private final UserPlayer player;
     private GameBoardInterface board;
-    private final Stack<Move> moveStack;
+    private final Stack<MoveModel> moveModelStack;
     private final DatabaseService databaseService;
 
     public GameModel() {
@@ -18,12 +18,12 @@ public class GameModel implements GameModelInterface {
         this.computer = new ComputerPlayer("r");
         this.player = new UserPlayer("g");
         this.board = new GameBoardModel(8);
-        this.moveStack = new Stack<>();
+        this.moveModelStack = new Stack<>();
     }
 
-    public boolean makeUserMove(Move move) {
-        if (this.board.makeMove(move)) {
-            moveStack.push(move);
+    public boolean makeUserMove(MoveModel moveModel) {
+        if (this.board.makeMove(moveModel)) {
+            moveModelStack.push(moveModel);
             return true;
         }
         return false;
@@ -38,21 +38,21 @@ public class GameModel implements GameModelInterface {
     }
 
     @Override
-    public Move getSystemMove() {
-        Move move = computer.makeMove(new GameBoardModel((GameBoardModel) (this.board)));
-        if (move != null) {
-            moveStack.push(move);
-            board.makeMove(move);
-            return move;
+    public MoveModel getSystemMove() {
+        MoveModel moveModel = computer.makeMove(new GameBoardModel((GameBoardModel) (this.board)));
+        if (moveModel != null) {
+            moveModelStack.push(moveModel);
+            board.makeMove(moveModel);
+            return moveModel;
         }
         return null;
     }
 
-    public Move undo() {
-        if(moveStack.isEmpty()) return null;
-        Move move = moveStack.pop();
-        this.board.undoMove(move);
-        return move;
+    public MoveModel undo() {
+        if(moveModelStack.isEmpty()) return null;
+        MoveModel moveModel = moveModelStack.pop();
+        this.board.undoMove(moveModel);
+        return moveModel;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class GameModel implements GameModelInterface {
     @Override
     public void clearBoard() {
         this.board.clearBoard();
-        moveStack.clear();
+        moveModelStack.clear();
     }
 
     public void changeBoardSize(int size) {
@@ -83,7 +83,7 @@ public class GameModel implements GameModelInterface {
     }
 
     @Override
-    public User getUser() {
+    public UserModel getUser() {
         return databaseService.getUser();
     }
 
@@ -93,7 +93,7 @@ public class GameModel implements GameModelInterface {
     }
 
     @Override
-    public ArrayList<User> getUsers() {
+    public ArrayList<UserModel> getUsers() {
         return databaseService.getUsers();
     }
 }

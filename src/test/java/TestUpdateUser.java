@@ -1,5 +1,5 @@
-import org.danielsa.proiect_ps.model.User;
 import org.danielsa.proiect_ps.DatabaseService;
+import org.danielsa.proiect_ps.model.UserModel;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -19,7 +19,7 @@ public class TestUpdateUser {
         String newUsername = "updatedTestUser" + rand;
         String newPassword = "updatedTestPassword";
         String newUserType = "ADMIN";
-        User updatedUser = databaseService.updateUser(username, newUsername, newPassword, newUserType);
+        UserModel updatedUser = databaseService.updateUser(username, newUsername, newPassword, newUserType);
 
         assertNotNull(updatedUser);
         assertEquals(newUsername, updatedUser.getUserName());

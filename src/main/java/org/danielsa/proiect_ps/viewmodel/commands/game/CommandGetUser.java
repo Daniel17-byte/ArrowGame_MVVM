@@ -1,6 +1,6 @@
 package org.danielsa.proiect_ps.viewmodel.commands.game;
 
-import org.danielsa.proiect_ps.model.User;
+import org.danielsa.proiect_ps.model.UserModel;
 import org.danielsa.proiect_ps.viewmodel.GameViewModel;
 
 public class CommandGetUser {
@@ -10,7 +10,7 @@ public class CommandGetUser {
         this.viewModel = viewModel;
     }
 
-    public User execute() {
+    public UserModel execute() {
         return viewModel.getModel().getUser();
     }
 }

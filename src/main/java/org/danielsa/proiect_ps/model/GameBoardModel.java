@@ -7,20 +7,20 @@ import java.util.ArrayList;
 @Getter
 public class GameBoardModel implements GameBoardInterface {
     private final int size;
-    private Arrow[][] board;
+    private ArrowModel[][] board;
     private final ArrayList<String> directions;
 
     public GameBoardModel(int size) {
         this.size = size;
         if (size == 4) directions = smallBoardDirections;
         else directions = largeBoardDirections;
-        board = new Arrow[size][size];
+        board = new ArrowModel[size][size];
     }
 
     public GameBoardModel(GameBoardModel gameBoard) {
         this.size = gameBoard.getSize();
         this.directions = gameBoard.directions;
-        this.board = new Arrow[this.size][this.size];
+        this.board = new ArrowModel[this.size][this.size];
         for (int i = 0; i < this.size; i++) {
             System.arraycopy(gameBoard.board[i], 0, this.board[i], 0, this.size);
         }
@@ -31,29 +31,29 @@ public class GameBoardModel implements GameBoardInterface {
         return size;
     }
 
-    public boolean makeMove(Move move) {
-        if (!isValidMove(move)) return false;
-        int row = move.getX();
-        int column = move.getY();
-        board[row][column] = move.getArrow();
+    public boolean makeMove(MoveModel moveModel) {
+        if (!isValidMove(moveModel)) return false;
+        int row = moveModel.getX();
+        int column = moveModel.getY();
+        board[row][column] = moveModel.getArrowModel();
         return true;
     }
 
-    public void undoMove(Move move) {
-        int row = move.getX();
-        int column = move.getY();
+    public void undoMove(MoveModel moveModel) {
+        int row = moveModel.getX();
+        int column = moveModel.getY();
         board[row][column] = null;
     }
 
-    public boolean isValidMove(Move move) {
-        int row = move.getX();
-        int column = move.getY();
-        Arrow arrow = move.getArrow();
+    public boolean isValidMove(MoveModel moveModel) {
+        int row = moveModel.getX();
+        int column = moveModel.getY();
+        ArrowModel arrowModel = moveModel.getArrowModel();
         if (null != board[row][column]) return false;
         for (int i = 0; i < size; i++) {
 
-            if (arrow.equals(board[row][i]) && i != column) return false;
-            if (arrow.equals(board[i][column]) && i != row) return false;
+            if (arrowModel.equals(board[row][i]) && i != column) return false;
+            if (arrowModel.equals(board[i][column]) && i != row) return false;
 
             int rmi = row - i - 1;
             int cmi = column - i - 1;
@@ -62,33 +62,33 @@ public class GameBoardModel implements GameBoardInterface {
 
             if (rmi >= 0) {
                 if (cpi < size) {
-                    if (arrow.equals(board[rmi][cpi])) return false;
+                    if (arrowModel.equals(board[rmi][cpi])) return false;
                 }
                 if (cmi >= 0) {
-                    if (arrow.equals(board[rmi][cmi])) return false;
+                    if (arrowModel.equals(board[rmi][cmi])) return false;
                 }
             }
             if (rpi < size) {
                 if (cpi < size) {
-                    if (arrow.equals(board[rpi][cpi])) return false;
+                    if (arrowModel.equals(board[rpi][cpi])) return false;
                 }
                 if (cmi >= 0) {
-                    if (arrow.equals(board[rpi][cmi])) return false;
+                    if (arrowModel.equals(board[rpi][cmi])) return false;
                 }
             }
         }
         return true;
     }
 
-    public ArrayList<Move> getValidMoves() {
-        ArrayList<Move> result = new ArrayList<>();
+    public ArrayList<MoveModel> getValidMoves() {
+        ArrayList<MoveModel> result = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (null != board[i][j]) continue;
                 for (String direction : directions) {
-                    Move move = new Move(i, j, new Arrow(direction));
-                    if (isValidMove(move)) {
-                        result.add(move);
+                    MoveModel moveModel = new MoveModel(i, j, new ArrowModel(direction));
+                    if (isValidMove(moveModel)) {
+                        result.add(moveModel);
                         break;
                     }
                 }
@@ -103,6 +103,6 @@ public class GameBoardModel implements GameBoardInterface {
 
     @Override
     public void clearBoard() {
-        this.board = new Arrow[size][size];
+        this.board = new ArrowModel[size][size];
     }
 }

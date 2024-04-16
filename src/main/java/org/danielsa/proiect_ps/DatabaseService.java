@@ -1,7 +1,7 @@
 package org.danielsa.proiect_ps;
 
 import lombok.Getter;
-import org.danielsa.proiect_ps.model.User;
+import org.danielsa.proiect_ps.model.UserModel;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -12,7 +12,7 @@ public class DatabaseService {
     private Connection connection;
 
     @Getter
-    private User user;
+    private UserModel user;
 
     public DatabaseService() {
         try {
@@ -35,7 +35,7 @@ public class DatabaseService {
                 String usrT = resultSet.getString("userType");
                 int gamesWon = resultSet.getInt("gameswon");
 
-                user = new User(usrN,usrT,gamesWon);
+                user = new UserModel(usrN,usrT,gamesWon);
                 SessionManager.createSession(user);
                 return true;
             }
@@ -56,7 +56,7 @@ public class DatabaseService {
             int rowsAffected = statement.executeUpdate();
 
             if (rowsAffected > 0) {
-                user = new User(username, usertype, 0);
+                user = new UserModel(username, usertype, 0);
                 SessionManager.createSession(user);
                 return true;
             }
@@ -67,8 +67,8 @@ public class DatabaseService {
         }
     }
 
-    public ArrayList<User> getUsers() {
-        ArrayList<User> users = new ArrayList<>();
+    public ArrayList<UserModel> getUsers() {
+        ArrayList<UserModel> users = new ArrayList<>();
 
         String query = "SELECT * FROM users";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -79,7 +79,7 @@ public class DatabaseService {
                 String usrN = resultSet.getString("username");
                 String usrT = resultSet.getString("userType");
                 int gamesWon = resultSet.getInt("gameswon");
-                users.add(new User(usrN,usrT,gamesWon));
+                users.add(new UserModel(usrN,usrT,gamesWon));
             }
 
         } catch (SQLException e) {
@@ -89,7 +89,7 @@ public class DatabaseService {
         return users;
     }
 
-    public User updateUser(String username, String newUsername, String newPassword, String newUserType) {
+    public UserModel updateUser(String username, String newUsername, String newPassword, String newUserType) {
         String query = "UPDATE users SET username = ?, password = ?, usertype = ? WHERE username = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, newUsername);
@@ -100,7 +100,7 @@ public class DatabaseService {
             int rowsAffected = statement.executeUpdate();
 
             if (rowsAffected > 0) {
-                return new User(newUsername, newUserType, getUser().getGamesWon());
+                return new UserModel(newUsername, newUserType, getUser().getGamesWon());
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -135,7 +135,7 @@ public class DatabaseService {
         user = getUserByUsername(user.getUserName());
     }
 
-    public User getUserByUsername(String username) {
+    public UserModel getUserByUsername(String username) {
         String query = "SELECT * FROM users WHERE username = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, username);
@@ -146,7 +146,7 @@ public class DatabaseService {
                 String usrN = resultSet.getString("username");
                 String usrT = resultSet.getString("userType");
                 int gamesWon = resultSet.getInt("gameswon");
-                return new User(usrN, usrT, gamesWon);
+                return new UserModel(usrN, usrT, gamesWon);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

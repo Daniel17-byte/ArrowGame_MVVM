@@ -11,7 +11,7 @@ public class ComputerPlayer extends UserPlayer {
         this.strategy = new MinMaxStrategy(8,16);
     }
 
-    public Move makeMove(GameBoardInterface board) {
+    public MoveModel makeMove(GameBoardInterface board) {
         return strategy.makeMove(board);
     }
 
