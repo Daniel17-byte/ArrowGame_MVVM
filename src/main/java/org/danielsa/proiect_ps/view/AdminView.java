@@ -41,25 +41,21 @@ public class AdminView extends Scene {
 
         userTableView.getItems().addAll(viewModel.getUsers());
 
+        viewModel.getUserTableViewProperty().set(userTableView);
+
         userTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> viewModel.getSelectedUserProperty().set(newVal));
 
-        addButton.setOnAction(event -> {
-            viewModel.addUser();
-            userTableView.getItems().addAll(viewModel.getUserByUsername());
-        });
+        addButton.setOnAction(event -> viewModel.addUser());
 
         updateButton.setOnAction(event -> {
             if (userTableView.getSelectionModel().getSelectedItem() != null) {
                 viewModel.updateUser();
-                userTableView.getItems().clear();
-                userTableView.getItems().addAll(viewModel.getUsers());
             }
         });
 
         deleteButton.setOnAction(event -> {
             if (userTableView.getSelectionModel().getSelectedItem() != null) {
                 viewModel.deleteUser();
-                userTableView.getItems().remove(userTableView.getSelectionModel().getSelectedItem());
             }
         });
 

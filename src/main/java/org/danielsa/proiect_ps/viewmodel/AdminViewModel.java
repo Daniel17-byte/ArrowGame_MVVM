@@ -4,6 +4,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.control.TableView;
 import lombok.Getter;
 import lombok.Setter;
 import org.danielsa.proiect_ps.model.AdminModel;
@@ -22,6 +23,8 @@ public class AdminViewModel {
     private final ObjectProperty<String> userTypeProperty = new SimpleObjectProperty<>();
     @Getter @Setter
     private ObjectProperty<User> selectedUserProperty = new SimpleObjectProperty<>();
+    @Getter @Setter
+    private ObjectProperty<TableView<User>> userTableViewProperty = new SimpleObjectProperty<>();
 
     public AdminViewModel() {
         this.model = new AdminModel();
@@ -29,23 +32,35 @@ public class AdminViewModel {
 
     public void addUser() {
         boolean success = model.register(usernameProperty.getValue(), passwordProperty.getValue(), userTypeProperty.getValue());
+
         if (!success) {
             System.out.println("User not added!");
         }
+
+        userTableViewProperty.getValue().getItems().addAll(getUserByUsername());
     }
 
     public void updateUser() {
         User updatedUser = model.updateUser(selectedUserProperty.getValue().getUserName(), usernameProperty.getValue(), passwordProperty.getValue(), userTypeProperty.getValue());
+
         if (updatedUser == null) {
             System.out.println("User not updated!");
+            return;
         }
+
+        userTableViewProperty.getValue().getItems().clear();
+        userTableViewProperty.getValue().getItems().addAll(getUsers());
     }
 
     public void deleteUser() {
         boolean success = model.deleteUser(selectedUserProperty.getValue().getUserName());
+
         if (!success) {
             System.out.println("User not deleted!");
+            return;
         }
+
+        userTableViewProperty.getValue().getItems().remove(userTableViewProperty.getValue().getSelectionModel().getSelectedItem());
     }
 
     public ArrayList<User> getUsers(){
@@ -64,6 +79,7 @@ public class AdminViewModel {
 
         if (user == null) {
             System.out.println("User not found");
+            return null;
         }
 
         return user;
