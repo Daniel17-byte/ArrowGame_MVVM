@@ -1,20 +1,14 @@
 package org.danielsa.proiect_ps.view;
 
-import javafx.animation.ScaleTransition;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.util.Duration;
-import org.danielsa.proiect_ps.Main;
 import org.danielsa.proiect_ps.model.UserType;
 import org.danielsa.proiect_ps.viewmodel.GameViewModel;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -122,7 +116,7 @@ public class GameView extends Scene {
         AnchorPane.setTopAnchor(boardLabel, 153.0);
         AnchorPane.setLeftAnchor(boardLabel, 22.0);
 
-        undoButton.setOnAction(e -> viewModel.clickedUndoButton());
+        undoButton.setOnAction(e -> viewModel.undoMove());
         AnchorPane.setTopAnchor(undoButton, 191.0);
         AnchorPane.setLeftAnchor(undoButton, 22.0);
 
@@ -177,7 +171,7 @@ public class GameView extends Scene {
         buttonRow.setSpacing(2);
 
         buttons.forEach((key, value) -> {
-            initializeButton(value);
+            viewModel.initializeButton(value);
             buttonRow.getChildren().add(value);
         });
 
@@ -211,39 +205,4 @@ public class GameView extends Scene {
         return centerPanel;
     }
 
-    public void initializeButton(Button button){
-        button.setBackground(setBgImage(button.getText() + ".png"));
-        button.setVisible(true);
-        button.setAlignment(javafx.geometry.Pos.BOTTOM_RIGHT);
-        button.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
-        button.setLayoutX(113.0);
-        button.setLayoutY(13.0);
-        button.setMnemonicParsing(false);
-        button.setPrefHeight(50.0);
-        button.setPrefWidth(50.0);
-        button.setPrefWidth(50.0);
-        button.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, null)));
-
-        button.setOnAction( e ->{
-            doButtonEffect(button);
-            viewModel.clickedArrowButton(e);
-        });
-    }
-
-    public Background setBgImage(String name){
-        BackgroundImage b = new BackgroundImage(new Image(new File(Main.path + "g" + name).toURI().toString()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-        return new Background(b);
-    }
-
-    public void doButtonEffect(Button button) {
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.2), button);
-        scaleTransition.setFromX(1);
-        scaleTransition.setFromY(1);
-        scaleTransition.setToX(0.8);
-        scaleTransition.setToY(0.8);
-        scaleTransition.setAutoReverse(true);
-        scaleTransition.setCycleCount(2);
-
-        scaleTransition.play();
-    }
 }
