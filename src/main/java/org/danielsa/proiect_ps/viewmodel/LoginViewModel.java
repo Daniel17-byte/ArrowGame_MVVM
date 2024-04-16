@@ -2,46 +2,33 @@ package org.danielsa.proiect_ps.viewmodel;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.stage.Stage;
 import lombok.Getter;
 import org.danielsa.proiect_ps.model.LoginModel;
 import org.danielsa.proiect_ps.model.LoginModelInterface;
-import org.danielsa.proiect_ps.view.*;
+import org.danielsa.proiect_ps.viewmodel.commands.login.CommandOpenRegisterWindow;
+import org.danielsa.proiect_ps.viewmodel.commands.login.CommandShowLoginResult;
 
+@Getter
 public class LoginViewModel {
     private final LoginModelInterface model;
-    @Getter
     private final StringProperty resultLabelProperty = new SimpleStringProperty();
-    @Getter
     private final StringProperty usernameProperty = new SimpleStringProperty();
-    @Getter
     private final StringProperty passwordProperty = new SimpleStringProperty();
+    private final CommandShowLoginResult commandShowLoginResult;
+    private final CommandOpenRegisterWindow commandOpenRegisterWindow;
 
     public LoginViewModel() {
         model = new LoginModel();
+        this.commandShowLoginResult = new CommandShowLoginResult(this);
+        this.commandOpenRegisterWindow = new CommandOpenRegisterWindow();
     }
 
     public void openRegisterWindow() {
-        RegisterView view = new RegisterView();
-        Stage registerStage = new Stage();
-
-        registerStage.setScene(view);
-        registerStage.setTitle("Register");
-        registerStage.show();
+        commandOpenRegisterWindow.execute();
     }
 
     public void showLoginResult() {
-        boolean success = model.authenticate(usernameProperty.getValue(), passwordProperty.getValue());
-        if (success) {
-            GameView view = new GameView();
-            Stage gameStage = new Stage();
-
-            gameStage.setScene(view);
-            gameStage.setTitle("Arrow Game");
-            gameStage.show();
-        } else {
-            resultLabelProperty.setValue("Login failed. Please try again.");
-        }
+        commandShowLoginResult.execute();
     }
 
 }

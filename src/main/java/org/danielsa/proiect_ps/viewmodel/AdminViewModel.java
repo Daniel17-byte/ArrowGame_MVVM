@@ -10,78 +10,49 @@ import lombok.Setter;
 import org.danielsa.proiect_ps.model.AdminModel;
 import org.danielsa.proiect_ps.model.AdminModelInterface;
 import org.danielsa.proiect_ps.model.User;
+import org.danielsa.proiect_ps.viewmodel.commands.admin.CommandAddUser;
+import org.danielsa.proiect_ps.viewmodel.commands.admin.CommandDeleteUser;
+import org.danielsa.proiect_ps.viewmodel.commands.admin.CommandGetUsers;
+import org.danielsa.proiect_ps.viewmodel.commands.admin.CommandUpdateUser;
 
 import java.util.ArrayList;
 
+@Getter
 public class AdminViewModel {
     private final AdminModelInterface model;
-    @Getter
     private final StringProperty usernameProperty = new SimpleStringProperty();
-    @Getter
     private final StringProperty passwordProperty = new SimpleStringProperty();
-    @Getter
     private final ObjectProperty<String> userTypeProperty = new SimpleObjectProperty<>();
-    @Getter @Setter
+    @Setter
     private ObjectProperty<User> selectedUserProperty = new SimpleObjectProperty<>();
-    @Getter @Setter
+    @Setter
     private ObjectProperty<TableView<User>> userTableViewProperty = new SimpleObjectProperty<>();
+    private final CommandAddUser commandAddUser;
+    private final CommandUpdateUser commandUpdateUser;
+    private final CommandDeleteUser commandDeleteUser;
+    private final CommandGetUsers commandGetUsers;
 
     public AdminViewModel() {
         this.model = new AdminModel();
+        this.commandAddUser = new CommandAddUser(this);
+        this.commandUpdateUser = new CommandUpdateUser(this);
+        this.commandDeleteUser = new CommandDeleteUser(this);
+        this.commandGetUsers = new CommandGetUsers(this);
     }
 
     public void addUser() {
-        boolean success = model.register(usernameProperty.getValue(), passwordProperty.getValue(), userTypeProperty.getValue());
-
-        if (!success) {
-            System.out.println("User not added!");
-        }
-
-        userTableViewProperty.getValue().getItems().addAll(getUserByUsername());
+        commandAddUser.execute();
     }
 
     public void updateUser() {
-        User updatedUser = model.updateUser(selectedUserProperty.getValue().getUserName(), usernameProperty.getValue(), passwordProperty.getValue(), userTypeProperty.getValue());
-
-        if (updatedUser == null) {
-            System.out.println("User not updated!");
-            return;
-        }
-
-        userTableViewProperty.getValue().getItems().clear();
-        userTableViewProperty.getValue().getItems().addAll(getUsers());
+        commandUpdateUser.execute();
     }
 
     public void deleteUser() {
-        boolean success = model.deleteUser(selectedUserProperty.getValue().getUserName());
-
-        if (!success) {
-            System.out.println("User not deleted!");
-            return;
-        }
-
-        userTableViewProperty.getValue().getItems().remove(userTableViewProperty.getValue().getSelectionModel().getSelectedItem());
+        commandDeleteUser.execute();
     }
 
     public ArrayList<User> getUsers(){
-        ArrayList<User> users = model.getUsers();
-
-        if (users.isEmpty()){
-            System.out.println("Couldn't load users!");
-            return null;
-        }
-
-        return users;
-    }
-
-    public User getUserByUsername() {
-        User user = model.getUserByUsername(usernameProperty.getValue());
-
-        if (user == null) {
-            System.out.println("User not found");
-            return null;
-        }
-
-        return user;
+        return commandGetUsers.execute();
     }
 }
