@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 public interface GameModelInterface {
     boolean makeUserMove(MoveModel moveModel);
-    void changePlayerColor(UserPlayer player, String color);
+    void changePlayerColor(UserPlayerModel player, String color);
     void changeBoardSize(int size);
     MoveModel getSystemMove();
     MoveModel undo();
-    UserPlayer getUserPlayer();
-    ComputerPlayer getComputer();
+    UserPlayerModel getUserPlayer();
+    ComputerPlayerModelModel getComputer();
     boolean isEndgame();
     void clearBoard();
     void updateUserScore();

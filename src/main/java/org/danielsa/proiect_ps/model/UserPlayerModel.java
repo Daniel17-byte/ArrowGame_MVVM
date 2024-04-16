@@ -5,10 +5,10 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class UserPlayer {
+public class UserPlayerModel {
     private String color;
     private UserModel user;
-    public UserPlayer(String color) {
+    public UserPlayerModel(String color) {
         this.color = color;
     }
 }

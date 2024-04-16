@@ -7,16 +7,16 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class GameModel implements GameModelInterface {
-    private final ComputerPlayer computer;
-    private final UserPlayer player;
+    private final ComputerPlayerModelModel computer;
+    private final UserPlayerModel player;
     private GameBoardInterface board;
     private final Stack<MoveModel> moveModelStack;
     private final DatabaseService databaseService;
 
     public GameModel() {
         this.databaseService = Main.context.getBean(DatabaseService.class);
-        this.computer = new ComputerPlayer("r");
-        this.player = new UserPlayer("g");
+        this.computer = new ComputerPlayerModelModel("r");
+        this.player = new UserPlayerModel("g");
         this.board = new GameBoardModel(8);
         this.moveModelStack = new Stack<>();
     }
@@ -30,7 +30,7 @@ public class GameModel implements GameModelInterface {
     }
 
     @Override
-    public void changePlayerColor(UserPlayer player, String color) {
+    public void changePlayerColor(UserPlayerModel player, String color) {
         if (!player.getColor().equals(color)) {
             computer.setColor(player.getColor());
             player.setColor(color);
@@ -56,12 +56,12 @@ public class GameModel implements GameModelInterface {
     }
 
     @Override
-    public UserPlayer getUserPlayer() {
+    public UserPlayerModel getUserPlayer() {
         return this.player;
     }
 
     @Override
-    public ComputerPlayer getComputer() {
+    public ComputerPlayerModelModel getComputer() {
         return this.computer;
     }
 

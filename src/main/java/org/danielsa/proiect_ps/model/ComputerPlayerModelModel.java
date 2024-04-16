@@ -3,10 +3,10 @@ package org.danielsa.proiect_ps.model;
 import lombok.Setter;
 
 @Setter
-public class ComputerPlayer extends UserPlayer {
+public class ComputerPlayerModelModel extends UserPlayerModel {
     private MinMaxStrategy strategy;
 
-    public ComputerPlayer(String color) {
+    public ComputerPlayerModelModel(String color) {
         super(color);
         this.strategy = new MinMaxStrategy(8,16);
     }
